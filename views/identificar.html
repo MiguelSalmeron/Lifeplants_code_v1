@@ -1,0 +1,24 @@
+<div class="section-header">
+  <h2>Identificar una Planta</h2>
+  <p>Sube una foto y nuestra IA te ayudará a descubrir qué planta es. Para mejores resultados, asegúrate de que la foto sea clara y enfocada.</p>
+</div>
+
+<div class="identifier-controls">
+  <input type="file" id="uploadInput" accept="image/*" style="display: none;">
+  <button id="uploadBtn" class="button-primary large">
+      <span class="material-symbols-outlined">upload_file</span>
+      Subir desde Galería
+  </button>
+  <button id="cameraBtn" class="button-secondary large">
+      <span class="material-symbols-outlined">photo_camera</span>
+      Usar Cámara
+  </button>
+</div>
+
+<div class="identifier-preview">
+  <img id="imagePreview" src="" alt="Vista previa de la planta">
+  <button id="clearPreviewBtn" class="clear-preview-btn" style="display: none;">&times;</button>
+</div>
+
+<div class="results-container" id="resultsContainer">
+  </div>

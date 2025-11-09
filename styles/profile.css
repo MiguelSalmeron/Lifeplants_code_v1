@@ -1,0 +1,201 @@
+/* --- ESTILOS PARA PÁGINAS DE PERFIL Y CONFIGURACIÓN --- */
+
+.settings-layout {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    gap: 2.5rem;
+    max-width: 1000px;
+    margin: 1rem auto;
+}
+
+.settings-nav {
+    background-color: var(--card-bg-color);
+    border-radius: var(--border-radius-medium);
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-light);
+    padding: 1rem;
+    align-self: flex-start;
+    position: sticky;
+    top: calc(var(--navbar-height) + 20px);
+}
+
+.settings-nav h3 {
+    margin-top: 0.5rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.8rem;
+    border-bottom: 1px solid var(--border-color);
+    font-size: 1.1em;
+    color: var(--secondary-text-color);
+}
+
+.settings-nav-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.settings-nav-list li a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0.9rem 1rem;
+    border-radius: var(--border-radius-small);
+    text-decoration: none;
+    font-weight: 500;
+    color: var(--text-color);
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.settings-nav-list li a:hover {
+    background-color: var(--hover-bg-color);
+    color: var(--primary-color);
+}
+
+.settings-nav-list li a.active {
+    background-color: var(--primary-color);
+    color: white;
+    font-weight: 600;
+}
+
+.settings-nav-list li a .material-symbols-outlined {
+    font-size: 1.3em;
+}
+
+.settings-content {
+    background-color: var(--card-bg-color);
+    border-radius: var(--border-radius-medium);
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-light);
+    padding: 2.5rem;
+}
+
+.settings-content h2 {
+    margin-top: 0;
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.form-field {
+    margin-bottom: 1.5rem;
+}
+
+.form-field label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    font-size: 1em;
+}
+
+.form-field input[type="text"],
+.form-field textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-small);
+    box-sizing: border-box;
+    background-color: var(--hover-bg-color);
+    color: var(--text-color);
+    font-size: 1em;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-field input[type="text"]:focus,
+.form-field textarea:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+    outline: none;
+    background-color: var(--card-bg-color);
+}
+
+.form-field textarea {
+    min-height: 120px;
+    resize: vertical;
+    font-family: inherit;
+}
+
+.status-success { color: var(--notification-bg); }
+.status-error { color: var(--danger-color); }
+.status-checking { color: var(--secondary-text-color); }
+
+body.onboarding-flow .navbar {
+    display: none;
+}
+body.onboarding-flow {
+    padding-top: 0;
+}
+body.onboarding-flow .footer {
+    display: none;
+}
+
+.page-content {
+    opacity: 0;
+    transform: translateY(15px);
+    animation: slideUpFadeIn 0.5s ease-out forwards;
+}
+
+@keyframes slideUpFadeIn {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.button-primary.is-loading,
+.button-secondary.is-loading {
+    color: transparent !important;
+    cursor: not-allowed;
+    position: relative;
+}
+
+.button-primary.is-loading::after,
+.button-secondary.is-loading::after {
+    content: '';
+    display: block;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-left: -10px;
+    margin-top: -10px;
+
+    animation: spin 0.8s linear infinite;
+
+    border-top: 2px solid rgba(255, 255, 255, 0.5);
+    border-right: 2px solid rgba(255, 255, 255, 0.5);
+    border-bottom: 2px solid rgba(255, 255, 255, 0.5);
+    border-left: 2px solid #ffffff;
+}
+
+.button-secondary.is-loading::after {
+    border-top: 2px solid rgba(0, 0, 0, 0.2);
+    border-right: 2px solid rgba(0, 0, 0, 0.2);
+    border-bottom: 2px solid rgba(0, 0, 0, 0.2);
+    border-left: 2px solid var(--primary-color);
+}
+
+@media (max-width: 768px) {
+    .settings-layout {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .settings-nav {
+        position: static;
+        top: auto;
+        padding: 1rem;
+    }
+
+    .settings-content {
+        padding: 1.5rem;
+    }
+
+    .settings-content h2 {
+        font-size: 1.6em;
+        padding-bottom: 1rem;
+        margin-bottom: 1.5rem;
+    }
+}

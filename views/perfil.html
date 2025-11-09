@@ -1,0 +1,55 @@
+<section id="profileSection" class="content-section">
+    <div class="section-header">
+        <h2>Mi Perfil</h2>
+        <p>Aquí puedes ver tu progreso, editar tu biografía y gestionar tu cuenta.</p>
+    </div>
+
+    <div class="profile-container" style="max-width: 800px;">
+
+        <div class="profile-card">
+
+            <div style="display: flex; justify-content: flex-end; width: 100%; margin-bottom: -1rem;">
+                <button id="editProfileBtn" class="button-primary">Editar Perfil</button>
+            </div>
+
+            <div class="profile-header" style="flex-direction: column; text-align: center; gap: 15px; margin-bottom: 0;">
+
+                <div id="profilePictureContainer">
+                    <img id="profilePictureImg" src="https://placehold.co/150x150/4CAF50/FFFFFF?text=LP" alt="Foto de perfil" loading="lazy" style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 3px solid var(--border-color);">
+                </div>
+
+                <div id="profileInfo">
+                    <h2 id="profileDisplayName" style="margin: 0; line-height: 1.2;">Cargando...</h2>
+                    <h3 id="profileUsername" style="color: var(--secondary-text-color); margin-top: 8px; font-weight: 500; margin-bottom: 0;">@cargando...</h3>
+                    <p id="profileEmail" style="color: var(--secondary-text-color); margin-top: 10px; font-size: 0.9em;">Cargando email...</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="profile-card">
+            <h3>Biografía</h3>
+            <div class="profile-bio-section">
+                <p id="profileBioText" style="color: var(--secondary-text-color); line-height: 1.6; width: 100%; margin: 0;">Cargando biografía...</p>
+            </div>
+        </div>
+
+        <div class="profile-card">
+            <h3>Insignias Obtenidas</h3>
+
+            <div id="badgesContainer" class="badges-grid">
+                <div class="spinner-container" style="min-height: 50px;">
+                    <div class="spinner"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="profile-card danger-zone">
+            <h3>Zona de Peligro</h3>
+            <div class="danger-action" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
+                <p style="margin: 0;">Esta acción no se puede deshacer. Esto eliminará permanentemente tu cuenta y datos.</p>
+                <button class="button-danger" id="deleteAccountBtn" disabled>Eliminar Cuenta (Próximamente)</button>
+            </div>
+        </div>
+
+    </div>
+</section>

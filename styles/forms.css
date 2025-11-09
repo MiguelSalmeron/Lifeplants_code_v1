@@ -1,0 +1,149 @@
+/* --- ESTILOS PARA FORMULARIOS Y CONTROLES (EJ. BARRA DE FILTROS) --- */
+
+/* Encabezado de la sección Explorar (opcional incluirlo aquí) */
+.explore-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+.explore-header h1 {
+    margin: 0;
+}
+
+/* Barra de Filtros */
+.filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    align-items: center;
+    background-color: var(--hover-bg-color);
+    padding: 18px;
+    border-radius: var(--border-radius-medium);
+    margin-bottom: 25px;
+    border: 1px solid var(--border-color);
+}
+
+/* Cada item dentro de la barra (label + input/select) */
+.filter-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.filter-item label {
+    font-size: 0.95em;
+    color: var(--secondary-text-color);
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+/* Estilos comunes para input de texto y select */
+.filter-item input[type="text"],
+.filter-item select {
+    padding: 10px 14px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-small);
+    background-color: var(--card-bg-color);
+    color: var(--text-color);
+    font-size: 0.95em;
+    font-family: inherit;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    flex-grow: 1;
+    min-width: 150px;
+}
+
+/* Estilo al enfocar (hacer clic) */
+.filter-item input[type="text"]:focus,
+.filter-item select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+    outline: none;
+}
+
+/* Ajuste específico para el input de búsqueda (dejar espacio para el icono) */
+.filter-item input[type="text"] {
+    padding-left: 38px;
+}
+
+/* Contenedor del input de búsqueda (para posicionar el icono) */
+.filter-item.search-item {
+    flex-grow: 1;
+    position: relative;
+    min-width: 200px;
+}
+
+/* Icono de lupa dentro del input de búsqueda */
+.filter-item.search-item svg {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    stroke: var(--secondary-text-color);
+    pointer-events: none;
+}
+
+/* Contenedor de sugerencias de autocompletado */
+.autocomplete-suggestions {
+    position: absolute;
+    top: calc(100% + 5px);
+    left: 0;
+    right: 0;
+    background-color: var(--card-bg-color);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-small);
+    box-shadow: var(--shadow-medium);
+    z-index: 100;
+    max-height: 200px;
+    overflow-y: auto;
+    display: none;
+}
+
+/* Cada sugerencia individual */
+.autocomplete-suggestions div {
+    padding: 12px 15px;
+    cursor: pointer;
+    color: var(--text-color);
+    transition: background-color 0.2s ease;
+    font-size: 0.95em;
+}
+
+.autocomplete-suggestions div:hover {
+    background-color: var(--hover-bg-color);
+}
+
+/* Estilos para otros elementos de formulario si los necesitas */
+/* Ejemplo: Estilos para .switch (toggle) si no están en otro archivo */
+.switch { position: relative; display: inline-block; width: 55px; height: 30px; vertical-align: middle;}
+.switch input { opacity: 0; width: 0; height: 0; }
+.slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; border-radius: 30px; transition: .4s; }
+.slider:before { position: absolute; content: ""; height: 22px; width: 22px; left: 4px; bottom: 4px; background-color: white; border-radius: 50%; transition: .4s; }
+input:checked + .slider { background-color: var(--primary-color); }
+input:checked + .slider:before { transform: translateX(25px); }
+
+/* Ejemplo: Estilos para selectores de tema (si no están en otro archivo) */
+.theme-selector {
+    padding: 8px 12px;
+    border-radius: var(--border-radius-small);
+    border: 1px solid var(--border-color);
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: inherit;
+    font-size: 0.95em;
+    cursor: pointer;
+    min-width: 120px;
+}
+.theme-selector:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+}
+
+/* --- ESTILO ESPECÍFICO PARA EL NUEVO SELECTOR DE ORDENAMIENTO --- */
+.filter-item.order-item select {
+    min-width: 180px; /* Un poco más ancho para las opciones de "Nombre (A-Z)" */
+}

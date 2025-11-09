@@ -1,0 +1,151 @@
+/* --- ESTILOS PRINCIPALES DEL SIDEBAR --- */
+.sidebar {
+    width: 280px; /* Ancho fijo para el sidebar */
+    max-width: 90vw; /* Máximo en pantallas pequeñas */
+    background-color: var(--card-bg-color);
+    border-left: 1px solid var(--border-color); /* Borde en la izquierda ahora */
+    height: 100vh; /* Alto total */
+    position: fixed; /* Fijo en la pantalla */
+    top: 0;
+    right: 0; /* <-- CAMBIO CLAVE: Posicionado a la derecha */
+    padding-top: 65px; /* Espacio para el header (navbar height) */
+    box-sizing: border-box;
+    overflow-y: auto; /* Scroll si el contenido es largo */
+    z-index: 1002; /* Encima del contenido, pero debajo del overlay */
+    box-shadow: var(--shadow-medium);
+
+    /* Oculto por defecto, deslizando hacia la DERECHA */
+    transform: translateX(100%); 
+    transition: transform 0.3s ease-in-out;
+}
+
+/* Visible cuando tiene la clase 'open' */
+.sidebar.open {
+    transform: translateX(0); 
+}
+
+/* Botón de cerrar (siempre visible dentro del sidebar) */
+.close-sidebar {
+    position: absolute;
+    top: 10px;
+    right: 15px; /* A la derecha del sidebar */
+    font-size: 2.5em;
+    font-weight: bold;
+    color: var(--secondary-text-color);
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: block; /* Siempre visible */
+}
+
+/* --- ESTILOS DEL CONTENIDO (Lo que ya tenías) --- */
+.sidebar-content {
+    padding: 0 10px; /* Padding para los menús */
+}
+
+.sidebar-content h4 {
+    padding: 10px 15px;
+    color: var(--secondary-text-color);
+    font-size: 0.9em;
+    text-transform: uppercase;
+    margin: 15px 0 5px;
+}
+
+.sidebar-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar-links li {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 12px 15px;
+    border-radius: var(--border-radius-small);
+    color: var(--text-color);
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    text-decoration: none;
+    white-space: nowrap;
+}
+.sidebar-links li .material-symbols-outlined {
+    color: var(--secondary-text-color);
+}
+.sidebar-links li:hover {
+    background-color: var(--hover-bg-color);
+    color: var(--primary-color);
+}
+.sidebar-links li:hover .material-symbols-outlined {
+    color: var(--primary-color);
+}
+.sidebar-links hr {
+    border: none;
+    border-top: 1px solid var(--border-color);
+    margin: 8px 15px;
+}
+#logoutBtn {
+    color: var(--danger-color);
+}
+#logoutBtn:hover {
+    background-color: var(--danger-color);
+    color: white;
+}
+#logoutBtn:hover .material-symbols-outlined {
+    color: white;
+}
+
+
+/* --- PRIORIDAD 8: VÍNCULO RÁPIDO A PERFIL --- */
+#sidebarProfileContainer {
+    padding: 15px;
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 10px;
+    display: none; /* Se mostrará con display: flex cuando el usuario esté logueado */
+}
+
+.sidebar-profile-link {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    text-decoration: none;
+    color: var(--text-color);
+    width: 100%;
+    padding: 10px;
+    border-radius: var(--border-radius-medium);
+    transition: background-color 0.2s ease;
+}
+
+.sidebar-profile-link:hover {
+    background-color: var(--hover-color-light);
+}
+
+.profile-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--primary-color);
+    flex-shrink: 0; /* Evita que la imagen se comprima */
+}
+
+.profile-info {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    overflow: hidden;
+}
+
+.profile-name {
+    font-weight: 600;
+    font-size: 1.1em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.profile-view-text {
+    font-size: 0.85em;
+    color: var(--secondary-text-color);
+}

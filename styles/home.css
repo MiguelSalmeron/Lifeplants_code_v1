@@ -1,0 +1,129 @@
+/* --- ESTILOS ESPECÍFICOS PARA LA PÁGINA DE INICIO (HOME) --- */
+
+/* Sección Hero (Imagen grande principal) */
+.hero-section {
+    position: relative; /* Para posicionar texto si es necesario */
+    /* Altura adaptable, con un mínimo y máximo */
+    height: 65vh; /* Aproximadamente 2/3 de la altura de la ventana */
+    min-height: 400px; /* Altura mínima */
+    max-height: 600px; /* Altura máxima */
+    display: flex;
+    align-items: center; /* Centrado vertical */
+    justify-content: center; /* Centrado horizontal */
+    text-align: center;
+    padding: 2rem; /* Espaciado interno */
+    color: white; /* Color del texto */
+    /* Imagen de fondo con gradiente oscuro superpuesto */
+    background: linear-gradient(rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.55)), url('https://images.unsplash.com/photo-1491147334573-44cbb4602074?q=80&w=2592&auto=format&fit=crop') no-repeat center center/cover;
+    background-attachment: fixed; /* Efecto parallax (opcional) */
+    border-radius: var(--border-radius-medium); /* Bordes redondeados */
+    overflow: hidden; /* Asegura que el contenido no se salga */
+    margin-bottom: 2.5rem; /* Espacio debajo de la sección hero */
+    box-sizing: border-box;
+}
+
+/* Contenedor del texto dentro de la sección Hero */
+.hero-text {
+    max-width: 700px; /* Ancho máximo para el texto */
+    /* Sombra de texto para mejorar legibilidad sobre la imagen */
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+}
+
+.hero-text h1 {
+    /* Tamaño de fuente adaptable */
+    font-size: clamp(2.5rem, 5vw, 3.8rem);
+    font-weight: 700; /* Negrita */
+    margin-top: 0; /* Sin margen superior */
+    margin-bottom: 0.8rem; /* Espacio debajo del título */
+    line-height: 1.2; /* Altura de línea ajustada */
+    color: white; /* Asegura color blanco */
+}
+
+.hero-text p {
+    font-size: 1.2rem; /* Tamaño del subtítulo */
+    max-width: 600px; /* Ancho máximo del párrafo */
+    margin-left: auto; /* Centra el párrafo si es más corto */
+    margin-right: auto;
+    margin-bottom: 2.5rem; /* Espacio antes del botón */
+    opacity: 0.9; /* Ligera transparencia */
+    color: white; /* Asegura color blanco */
+}
+
+/* Botón Grande "Comenzar a Explorar" (Estilo específico del Hero) */
+/* Si ya moviste .explore-button-panel a buttons.css, puedes borrar este bloque */
+.explore-button-panel {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background-color: var(--primary-color);
+    color: white;
+    border: 2px solid var(--primary-color);
+    padding: 14px 32px; /* Más grande */
+    font-size: 1.15em;
+    border-radius: var(--border-radius-large); /* Muy redondeado */
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 600;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    text-decoration: none;
+}
+
+.explore-button-panel:hover {
+    background-color: transparent;
+    border-color: white; /* Borde blanco sobre fondo oscuro */
+    color: white;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+    transform: translateY(-2px);
+}
+
+/* Contenedor para las tarjetas informativas (si existen en home.html) */
+.info-feature-container {
+    display: grid;
+    /* Columnas adaptables: mínimo 280px, ocupan espacio disponible */
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem; /* Espacio entre tarjetas */
+    padding: 3rem 0; /* Espaciado vertical */
+    max-width: 1100px; /* Ancho máximo del contenedor */
+    margin: 0 auto; /* Centrado */
+}
+
+/* Estilos para las tarjetas informativas individuales */
+/* Si ya moviste .info-feature-card a cards.css, puedes borrar este bloque */
+/*
+.info-feature-card {
+    background-color: var(--card-bg-color);
+    padding: 2rem;
+    text-align: center;
+    border-radius: var(--border-radius-medium);
+    box-shadow: var(--shadow-light);
+    border: 1px solid var(--border-color);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.info-feature-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-medium);
+}
+
+.info-feature-card svg {
+    width: 45px;
+    height: 45px;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+}
+
+.info-feature-card h3 {
+    font-size: 1.4rem;
+    margin-top: 0;
+    margin-bottom: 0.6rem;
+    color: var(--text-color);
+}
+
+.info-feature-card p {
+    color: var(--secondary-text-color);
+    line-height: 1.7;
+    font-size: 0.95em;
+    margin-bottom: 0;
+}
+*/

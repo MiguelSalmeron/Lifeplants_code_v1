@@ -1,0 +1,41 @@
+<div class="explore-header">
+  <h1>Explora las Plantas</h1>
+  <button id="resetFiltersBtn" class="button-secondary">Limpiar Filtros</button>
+</div>
+
+<div class="filter-bar">
+  <div class="filter-item search-item">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+      <input type="text" id="exploreSearchInput" placeholder="Buscar por nombre...">
+      <div class="autocomplete-suggestions" id="autocompleteSuggestions"></div>
+  </div>
+  <div class="filter-item">
+      <label for="filterUso">Uso:</label>
+      <select id="filterUso">
+          <option value="todos">Todos</option>
+          </select>
+  </div>
+  <div class="filter-item">
+      <label for="filterRegion">Región:</label>
+      <select id="filterRegion">
+          <option value="todos">Todas</option>
+          </select>
+  </div>
+  <div class="filter-item">
+      <label for="filterTipo">Tipo:</label>
+      <select id="filterTipo">
+          <option value="todos">Todos</option>
+          </select>
+  </div>
+  <div class="filter-item order-item">
+      <label for="filterOrder">Ordenar por:</label>
+      <select id="filterOrder">
+          <option value="name_asc">Nombre (A-Z)</option>
+          <option value="name_desc">Nombre (Z-A)</option>
+          <option value="popularidad">Más Populares</option>
+          </select>
+  </div>
+  </div>
+
+<div class="plant-grid" id="plantGridContainer">
+  </div>

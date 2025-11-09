@@ -1,0 +1,93 @@
+{
+    "ajo": {
+        "name": "Ajo",
+        "scientificName": "Allium sativum",
+        "whatIs": "Una planta bulbosa con un olor característico, usada como condimento y medicina.",
+        "whatIsItFor": "Se usa como antibiótico natural, para bajar el colesterol y la presión arterial, y fortalecer el sistema inmunológico.",
+        "imageCard": "https://img.freepik.com/fotos-premium/ajo-reflexion-sobre-fondo-negro_491078-1146.jpg",
+        "longDescription": "El ajo es una especie de planta bulbosa del género Allium. Ha sido utilizado por la humanidad durante miles de años tanto por sus propiedades culinarias como medicinales. Contiene alicina, un compuesto sulfurado que le confiere su olor distintivo y muchas de sus propiedades saludables.",
+        "benefits": "Potente antibiótico natural, reduce la presión arterial, mejora los niveles de colesterol, propiedades antioxidantes.",
+        "sideEffects": "Puede causar mal aliento, olor corporal, malestar estomacal y acidez. Puede aumentar el riesgo de sangrado si se toma en grandes cantidades.",
+        "region": ["asia", "global"],
+        "tipo": "hierba",
+        "uso": ["comestible", "medicinal"]
+    },
+    "arnica": {
+        "name": "Árnica",
+        "scientificName": "Arnica montana",
+        "whatIs": "Planta herbácea perenne de zonas montañosas de Europa.",
+        "whatIsItFor": "Uso tópico (cremas/geles) para aliviar dolor muscular, inflamación, golpes y moretones.",
+        "imageCard": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT2IKO119AEGMt62MEBXpwVup2E3uLUNZiCKg&s",
+        "longDescription": "La Arnica montana es una flor amarilla que crece en las montañas de Europa y Siberia. Es famosa por sus propiedades antiinflamatorias y analgésicas. Se usa comúnmente en preparaciones homeopáticas y geles tópicos para tratar contusiones y esguinces.",
+        "benefits": "Alivia el dolor por golpes, reduce la inflamación de hematomas (moretones), calma el dolor muscular y articular.",
+        "sideEffects": "Altamente tóxica si se ingiere. Solo debe usarse de forma tópica sobre piel intacta (sin heridas abiertas). Puede causar irritación en pieles sensibles.",
+        "region": ["europa"],
+        "tipo": "hierba",
+        "uso": ["medicinal"]
+    },
+    "boldo": {
+        "name": "Boldo",
+        "scientificName": "Peumus boldus",
+        "whatIs": "Árbol o arbusto perenne nativo de Chile.",
+        "whatIsItFor": "Principalmente para aliviar problemas digestivos, indigestión, gases y estimular la producción de bilis (efecto colagogo).",
+        "imageCard": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT2IKO119AEGMt62MEBXpwVup2E3uLUNZiCKg&s",
+        "longDescription": "El boldo es un árbol endémico de las regiones montañosas de Chile. Sus hojas se han utilizado en la medicina popular durante siglos, especialmente por sus beneficios para el hígado y la vesícula biliar. Contiene un alcaloide llamado boldina.",
+        "benefits": "Mejora la digestión, alivia el malestar estomacal, protege el hígado, propiedades diuréticas leves.",
+        "sideEffects": "No se recomienda su uso prolongado (más de 4 semanas) ni durante el embarazo o lactancia. En dosis altas puede ser tóxico.",
+        "region": ["america_sur"],
+        "tipo": "arbol",
+        "uso": ["medicinal"]
+    },
+    "canela": {
+        "name": "Canela",
+        "scientificName": "Cinnamomum verum",
+        "whatIs": "Un árbol cuya corteza aromática se usa como especia.",
+        "whatIsItFor": "Se usa para problemas digestivos, regular el azúcar en sangre y como antimicrobiano.",
+        "imageCard": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTBlclHi7nXhAoqN7P9B1xUkHJzxxzio0wqIw&s",
+        "longDescription": "La canela se obtiene de la corteza interna de varios árboles del género Cinnamomum. Es una de las especias más antiguas conocidas. Además de su uso culinario, se valora por sus propiedades medicinales, incluyendo su capacidad para ayudar a controlar los niveles de glucosa en sangre.",
+        "benefits": "Ayuda a regular el azúcar en sangre, propiedades antioxidantes y antiinflamatorias, alivia el malestar digestivo.",
+        "sideEffects": "El tipo 'Cassia' (más común) contiene cumarina, que puede ser tóxica para el hígado en dosis altas. La canela 'Ceylan' (verum) es más segura.",
+        "region": ["asia", "global"],
+        "tipo": "arbol",
+        "uso": ["comestible", "medicinal"]
+    },
+    "curcuma": {
+        "name": "Cúrcuma",
+        "scientificName": "Curcuma longa",
+        "whatIs": "Planta herbácea cuyo rizoma (tallo subterráneo) se usa como especia.",
+        "whatIsItFor": "Potente antiinflamatorio y antioxidante, gracias a su compuesto activo, la curcumina.",
+        "imageCard": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT2IKO119AEGMt62MEBXpwVup2E3uLUNZiCKg&s",
+        "longDescription": "La cúrcuma es una planta de la familia del jengibre, nativa del sudeste asiático. Su rizoma se seca y se muele para obtener el polvo amarillo brillante usado en el curry. La curcumina es su principal ingrediente activo, estudiado por sus potentes efectos antiinflamatorios.",
+        "benefits": "Reduce la inflamación crónica, alivia el dolor de la artritis, potente antioxidante, mejora la salud cerebral.",
+        "sideEffects": "Generalmente segura. En dosis muy altas puede causar problemas digestivos. Se absorbe mejor si se consume junto con pimienta negra (piperina).",
+        "region": ["asia", "global"],
+        "tipo": "hierba",
+        "uso": ["comestible", "medicinal"]
+    },
+    "candelillo": {
+        "name": "Candelillo",
+        "scientificName": "Senna alata",
+        "whatIs": "Un arbusto con grandes hojas y flores amarillas, también conocido como 'Mata Gusano'.",
+        "whatIsItFor": "Las hojas se usan para tratar infecciones fúngicas de la piel (tiña, pie de atleta) y como laxante.",
+        "imageCard": "https://static.inaturalist.org/photos/15451265/medium.jpg",
+        "longDescription": "La Senna alata es un arbusto ornamental valorado en la medicina tradicional por sus fuertes propiedades fungicidas. Las hojas contienen un compuesto llamado ácido crisofánico, que es eficaz contra muchos tipos de hongos de la piel. También se usa como un laxante potente.",
+        "benefits": "Eficaz tratamiento tópico para la tiña y otras infecciones por hongos, propiedades laxantes.",
+        "sideEffects": "No debe ingerirse sin supervisión médica debido a su fuerte efecto laxante. El uso tópico puede irritar la piel sensible.",
+        "region": ["america_central", "america_sur"],
+        "tipo": "arbusto",
+        "uso": ["medicinal"]
+    },
+    "guanabana": {
+        "name": "Guanábana",
+        "scientificName": "Annona muricata",
+        "whatIs": "Un árbol frutal tropical. Se usan sus hojas en infusión.",
+        "whatIsItFor": "Las hojas se usan en infusión para problemas nerviosos, insomnio, hipertensión y para reducir la fiebre.",
+        "imageCard": "https://blog.oncosalud.pe/hubfs/beneficios-de-la-guanabana-para-tu-salud-imagen-1-1.jpg",
+        "longDescription": "La guanábana (o graviola) es un árbol de hoja perenne cuyo fruto es muy apreciado. Sin embargo, sus hojas son muy populares en la medicina tradicional. Se hierven para hacer un té que se considera calmante y sedante, ayudando a reducir la ansiedad y promover el sueño.",
+        "benefits": "Ayuda a conciliar el sueño, reduce la ansiedad y el estrés, puede ayudar a bajar la presión arterial.",
+        "sideEffects": "El consumo excesivo o prolongado de las hojas puede estar relacionado con problemas neurológicos. Usar con moderación.",
+        "region": ["america_central", "america_sur"],
+        "tipo": "arbol",
+        "uso": ["medicinal", "comestible"]
+    }
+}

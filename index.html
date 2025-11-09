@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LifePlants | Reconstruido</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <link rel="stylesheet" href="/style.css">
+    <link rel="icon" type="image/png" href="logo1.png">
+    <script type="module" src="/js/app.js"></script>
+</head>
+<body>
+    <a href="#app-root" class="skip-link">Saltar al contenido principal</a>
+
+    <div id="loader" class="loader-container">
+        <div class="spinner"></div>
+        <p>Cargando LifePlants...</p>
+    </div>
+
+    <div class="main-container-wrapper" style="visibility: hidden;">
+
+        <nav class="navbar">
+            <div class="nav-brand">
+                <img src="logo1.png" alt="Logo Life Plants" class="nav-logo" data-navigate="/home">
+                <a href="/home" class="nav-title" data-navigate="/home">LifePlants</a>
+            </div>
+            <div class="nav-links">
+                <a href="/explorar" data-navigate="/explorar">Explorar</a>
+                <a href="/identificar" data-navigate="/identificar">Identificar</a>
+                <a href="/campana" data-navigate="/campana">Campañas</a>
+                <div class="nav-dropdown">
+                    <button class="nav-dropdown-toggle">Más <span class="material-symbols-outlined">expand_more</span></button>
+                    <div class="nav-dropdown-menu">
+                        <a href="/comunidades" data-navigate="/comunidades">Comunidades</a>
+                        <a href="/donaciones" data-navigate="/donaciones">Donaciones</a>
+                    </div>
+                </div>
+            </div>
+            <div class="nav-actions">
+                <div id="user-info-container">
+                    <a href="#" id="loginLink" class="header-button-link">Iniciar Sesión</a>
+                </div>
+                <button class="menu-toggle" id="menu-toggle-button" aria-label="Abrir menú">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                </button>
+            </div>
+        </nav>
+
+        <aside class="sidebar" id="sidebar">
+            <button class="close-sidebar" id="close-sidebar-button" aria-label="Cerrar menú">&times;</button>
+            <div id="sidebarProfileContainer">
+            </div>
+            <div class="sidebar-content">
+            </div>
+        </aside>
+
+        <div class="overlay" id="overlay"></div>
+
+        <main id="app-root" class="app-root">
+        </main>
+
+    </div><footer class="footer">
+        <p>© 2025 LifePlants. Todos los derechos reservados.</p>
+        <div class="footer-links">
+            <a href="#">Privacidad</a> | <a href="#">Términos</a> | <a href="/creditos" data-navigate="/creditos">Créditos</a> | <a href="#" data-navigate="/donaciones">Donaciones</a>
+        </div>
+    </footer>
+
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal-button" id="closeLoginModal">&times;</span>
+            <h2>Iniciar Sesión</h2>
+            <form id="loginForm">
+                <label for="loginEmailSimulated">Correo Electrónico</label>
+                <input type="email" id="loginEmailSimulated" required>
+                <div class="form-error-message" id="loginEmailError"></div>
+                <label for="loginPasswordSimulated">Contraseña</label>
+                <input type="password" id="loginPasswordSimulated" required>
+                <div class="form-error-message" id="loginPasswordError"></div>
+                <button type="submit">Iniciar Sesión</button>
+            </form>
+            <div class="or-separator">o</div>
+            <button class="google-login-button" id="googleLoginBtn">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="Google Logo" width="20" height="20">
+                <span>Continuar con Google</span>
+            </button>
+            <a id="switchToRegisterLinkSimulated" class="modal-switch-link">¿No tienes cuenta? Regístrate</a>
+        </div>
+    </div>
+    <div id="registerModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal-button" id="closeRegisterModal">&times;</span>
+            <h2>Crear Cuenta</h2>
+            <form id="registerForm">
+                <label for="registerNameSimulated">Nombre</label> <input type="text" id="registerNameSimulated" required>
+                <div class="form-error-message" id="registerNameError"></div>
+                <label for="registerEmailSimulated">Correo Electrónico</label>
+                <input type="email" id="registerEmailSimulated" required>
+                <div class="form-error-message" id="registerEmailError"></div>
+                <label for="registerPasswordSimulated">Contraseña</label>
+                <input type="password" id="registerPasswordSimulated" required>
+                <div class="form-error-message" id="registerPasswordError"></div>
+                <button type="submit">Registrarse</button>
+            </form>
+            <a id="switchToLoginLinkSimulated" class="modal-switch-link">¿Ya tienes cuenta? Inicia Sesión</a>
+        </div>
+    </div>
+    <div id="cameraModal" class="modal"><div class="modal-content camera-modal-content"><video id="cameraFeed" autoplay playsinline></video><button id="captureBtn" class="capture-btn"></button><span class="close-modal-button" id="closeCameraModal">&times;</span></div></div>
+    <div id="campaignModal" class="modal"><div class="modal-content" id="campaignModalContent"></div><span class="close-modal-button" id="closeCampaignModal">&times;</span></div>
+    <div id="toast-container"></div>
+
+    <div id="searchModal" class="modal">
+        <div class="modal-content search-modal-content">
+            <span class="close-modal-button" id="closeSearchModal">&times;</span>
+            <div class="search-input-container">
+                <span class="material-symbols-outlined">search</span>
+                <input type="text" id="quickSearchInput" placeholder="Busca plantas, foros o comunidades...">
+            </div>
+            <div id="quickSearchResults" class="quick-search-results">
+                 <p class="search-tip">Busca por nombre común o científico. Presiona Enter para ir a la vista Explorar.</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

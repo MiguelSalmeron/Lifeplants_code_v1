@@ -1,0 +1,65 @@
+<section id="campaignDetailSection">
+    <button class="button-secondary js-back-btn" style="margin-bottom: 1.5rem;">&larr; Volver a Campañas</button>
+
+    <div class="section-header" style="text-align: left; padding: 2rem; background-color: var(--card-bg-color); border-radius: var(--border-radius-medium); display: flex; align-items: center; gap: 25px; margin-bottom: 2rem;">
+        <span class="material-symbols-outlined campaign-modal-icon" id="campaignDetailIcon" style="font-size: 5em; margin-bottom: 0;"></span>
+        <div>
+            <h1 id="campaignDetailTitle" style="margin-bottom: 0.5rem; text-align: left;">Cargando...</h1>
+            <p id="campaignSlogan" style="margin-bottom: 0; text-align: left; max-width: 100%; font-size: 1.1em; color: var(--secondary-text-color); font-weight: 500;">"Del click al bosque."</p>
+        </div>
+    </div>
+
+    <div class="profile-card" style="max-width: 1000px; margin: 2rem auto;">
+        <h3>Progreso General de la Campaña</h3>
+        <div class="campaign-stats" id="campaignDetailStats" style="border-bottom: none; margin-bottom: 1rem;">
+            <div class="spinner-container" style="min-height: 50px;"><div class="spinner"></div></div>
+        </div>
+        <div class="campaign-progress" id="campaignDetailProgress" style="margin-top: 1rem;">
+            </div>
+    </div>
+
+    <div class="profile-card" style="max-width: 1000px; margin: 2rem auto;">
+        <h3>Diario de la Campaña</h3>
+        <p style="color: var(--secondary-text-color); margin-top: -1rem; margin-bottom: 2rem;">Sigue el impacto y la evolución de nuestra misión. ¡Tú eres parte de esto!</p>
+
+        <div id="campaignUpdatesContainer">
+
+            <div class="campaign-update-item" style="display: flex; gap: 20px; margin-bottom: 2.5rem;">
+                <span class="material-symbols-outlined" style="font-size: 2.5em; color: var(--primary-color); background-color: var(--hover-bg-color); border-radius: 50%; padding: 10px;">design_services</span>
+                <div>
+                    <h4 style="margin: 0 0 0.5rem 0; font-size: 1.25em;">El Plan: Plantación "Croquis A"</h4>
+                    <p style="color: var(--secondary-text-color); margin-bottom: 0.5rem;">
+                        Nuestra estrategia se basa en el **"Croquis A"** [cite: 128]: un diseño de 5 caobas plantadas en cruz dentro de un área de <strong>$36~m^{2}$</strong> (6x6 m)[cite: 109]. Este método asegura un espaciamiento óptimo de 3 metros entre árboles [cite: 111] y respeta un margen de seguridad de 3m con el muro lateral[cite: 110].
+                    </p>
+                    <span class="update-date" style="font-size: 0.9em; color: var(--secondary-text-color); font-weight: 500;">Fase 1: Planificación y Diseño</span>
+                </div>
+            </div>
+
+            <div class="campaign-update-item" style="display: flex; gap: 20px; margin-bottom: 2.5rem; border-top: 1px solid var(--border-color); padding-top: 2.5rem;">
+                <span class="material-symbols-outlined" style="font-size: 2.5em; color: var(--primary-color); background-color: var(--hover-bg-color); border-radius: 50%; padding: 10px;">flag</span>
+                <div>
+                    <h4 style="margin: 0 0 0.5rem 0; font-size: 1.25em;">Nuestra Misión</h4>
+                    <p style="color: var(--secondary-text-color); margin-bottom: 0.5rem;">
+                        Buscamos **impulsar acciones de reforestación que regeneren áreas degradadas**[cite: 30]. Esta campaña no solo planta árboles, sino que crea espacios verdes resilientes que fortalecen la biodiversidad y fomentan la conciencia ambiental en las escuelas[cite: 30].
+                    </p>
+                    <span class="update-date" style="font-size: 0.9em; color: var(--secondary-text-color); font-weight: 500;">El Propósito</span>
+                </div>
+            </div>
+
+            <div class="campaign-update-item" style="display: flex; gap: 20px; border-top: 1px solid var(--border-color); padding-top: 2.5rem;">
+                <span class="material-symbols-outlined" style="font-size: 2.5em; color: var(--primary-color); background-color: var(--hover-bg-color); border-radius: 50%; padding: 10px;">checklist</span>
+                <div>
+                    <h4 style="margin: 0 0 1rem 0; font-size: 1.25em;">Metas Específicas</h4>
+                    <ul style="list-style-type: '✓ '; padding-left: 1.5rem; color: var(--secondary-text-color); line-height: 1.8;">
+                        <li>Restaurar un área de <strong>$36~m^{2}$</strong> de plantación[cite: 44].</li>
+                        <li>Involucrar al menos <strong>8-10 voluntarios</strong> en la siembra y mantenimiento[cite: 45].</li>
+                        <li>Implementar <strong>Lifeplants.org</strong> para el seguimiento digital de cada árbol[cite: 46, 65].</li>
+                        <li>Garantizar un índice de <strong>supervivencia del 80%</strong> en los primeros 2 años[cite: 47].</li>
+                    </ul>
+                    <span class="update-date" style="font-size: 0.9em; color: var(--secondary-text-color); font-weight: 500; margin-top: 1rem; display: block;">Los Objetivos</span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>

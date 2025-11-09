@@ -1,0 +1,381 @@
+/* --- ESTILOS PARA TARJETAS (CARDS) --- */
+
+/* --- Tarjeta de Planta (Explorar, Favoritos) --- */
+.plant-card {
+    background-color: var(--card-bg-color);
+    border-radius: var(--border-radius-medium);
+    padding: 15px;
+    text-align: center;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+    border: 1px solid var(--border-color);
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    box-shadow: var(--shadow-light);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.plant-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-medium);
+    border-color: var(--primary-color);
+}
+
+.plant-card img {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: var(--border-radius-small);
+    margin-bottom: 10px;
+    image-rendering: optimizeSpeed; /* Sugiere al navegador optimizar velocidad sobre calidad */
+}
+
+.plant-card h4 {
+    margin: 10px 0 5px;
+    font-size: 1.15em;
+    color: var(--text-color);
+    margin-top: auto;
+    padding-top: 10px;
+}
+
+/* Botón de Favorito en la tarjeta de planta */
+.plant-card-fav-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: rgba(0,0,0,0.5);
+    border: none;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.plant-card-fav-btn:hover {
+    background-color: rgba(0,0,0,0.7);
+    transform: scale(1.1);
+}
+
+.plant-card-fav-btn svg {
+    stroke: white;
+    fill: none;
+    width: 20px;
+    height: 20px;
+}
+.plant-card-fav-btn.favorited svg {
+    fill: #FFD700;
+    stroke: #FFD700;
+}
+
+
+/* --- Tarjeta de Campaña --- */
+.campaign-card {
+    background-color: var(--card-bg-color);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-medium);
+    padding: 1.8rem;
+    text-align: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    cursor: pointer;
+    box-shadow: var(--shadow-light);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.campaign-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-medium);
+}
+
+.campaign-icon {
+    font-size: 52px;
+    color: var(--primary-color);
+    margin-bottom: 1.2rem;
+    display: inline-block;
+}
+
+.campaign-card h4 {
+    margin-top: 0;
+    margin-bottom: 0.6rem;
+    font-size: 1.3em;
+    color: var(--text-color);
+}
+
+.campaign-card p {
+    color: var(--secondary-text-color);
+    font-size: 0.95em;
+    margin-bottom: 1.8rem;
+    line-height: 1.6;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-height: calc(1.6em * 3);
+    flex-grow: 1;
+}
+
+.campaign-card .button-primary {
+    width: 100%;
+    padding: 12px 20px;
+    font-size: 1em;
+    margin-top: auto;
+}
+
+
+/* --- Tarjeta de Foro --- */
+.forum-card {
+    background: var(--card-bg-color);
+    border-radius: var(--border-radius-medium);
+    padding: 1.8rem;
+    border: 1px solid var(--border-color);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    cursor: pointer;
+    box-shadow: var(--shadow-light);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.forum-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-medium);
+}
+
+.forum-card-header {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    margin-bottom: 1.2rem;
+}
+
+.forum-card-icon {
+    font-size: 2.2em;
+    line-height: 1;
+}
+
+.forum-card-title {
+    font-size: 1.3em;
+    font-weight: 600;
+    margin: 0;
+    color: var(--text-color);
+}
+
+.forum-card-description {
+    color: var(--secondary-text-color);
+    font-size: 0.95em;
+    line-height: 1.6;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+/* --- Tarjeta de Comunidad --- */
+.community-card {
+    background: var(--card-bg-color);
+    border-radius: var(--border-radius-medium);
+    border: 1px solid var(--border-color);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    cursor: pointer;
+    box-shadow: var(--shadow-light);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.community-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-medium);
+}
+
+.community-card-banner {
+    height: 150px;
+    width: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.community-card-content {
+    padding: 1.5rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.community-card-content h4 {
+    font-size: 1.25em;
+    margin-top: 0;
+    margin-bottom: 0.6rem;
+    color: var(--text-color);
+}
+
+.community-card-content p {
+    font-size: 0.95em;
+    color: var(--secondary-text-color);
+    line-height: 1.6;
+    flex-grow: 1;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 1rem;
+}
+
+.join-button {
+    padding: 10px 18px;
+    border-radius: var(--border-radius-small);
+    font-weight: 500;
+    border: none;
+    cursor: pointer;
+    display: block;
+    margin-top: auto;
+    width: 100%;
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+.join-button:hover {
+    background-color: var(--primary-hover-color);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+
+/* --- Tarjeta Planta de la Semana (Home) --- */
+.plant-of-the-week-card {
+    display: flex;
+    background-color: var(--card-bg-color);
+    border-radius: var(--border-radius-medium);
+    box-shadow: var(--shadow-medium);
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    max-width: 1000px;
+    margin: 1.5rem auto;
+}
+.plant-of-the-week-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+}
+
+.potw-image-container {
+    width: 40%;
+    flex-shrink: 0;
+    position: relative;
+}
+
+.potw-image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.potw-content-container {
+    padding: 2rem 2.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.potw-tag {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 5px 12px;
+    border-radius: var(--border-radius-large);
+    font-size: 0.8em;
+    font-weight: 600;
+    display: inline-block;
+    margin-bottom: 1rem;
+    align-self: flex-start;
+}
+
+.potw-content-container h2 {
+    font-size: clamp(1.8em, 3vw, 2.2em);
+    margin-top: 0;
+    margin-bottom: 0.8rem;
+    color: var(--text-color);
+    line-height: 1.2;
+}
+
+.potw-content-container p {
+    color: var(--secondary-text-color);
+    margin-bottom: 1.5rem;
+    line-height: 1.7;
+    font-size: 1em;
+}
+
+.potw-content-container .button-primary {
+    align-self: flex-start;
+    padding: 12px 24px;
+    font-size: 1em;
+}
+
+@media (max-width: 768px) {
+    .plant-of-the-week-card {
+        flex-direction: column;
+    }
+    .potw-image-container {
+        width: 100%;
+        height: 250px;
+    }
+    .potw-content-container {
+        padding: 1.5rem;
+    }
+    .potw-content-container h2 {
+        font-size: 1.8em;
+    }
+}
+
+
+/* --- Tarjeta de Resultado (Identificación) --- */
+.result-card {
+    background-color: var(--card-bg-color);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-medium);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: var(--shadow-light);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.result-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-medium);
+}
+
+.result-card h3 {
+    margin-top: 0;
+    font-size: 1.4em;
+    color: var(--text-color);
+    margin-bottom: 0.3rem;
+}
+.result-card p:first-of-type {
+    font-style: italic;
+    color: var(--secondary-text-color);
+    margin-bottom: 1rem;
+    font-size: 0.95em;
+}
+.result-card p:last-of-type {
+     color: var(--text-color);
+     margin-bottom: 0;
+}
+.result-card strong {
+    font-weight: 600;
+}
+
+.result-card.loading-card {
+    text-align: center;
+    padding: 2rem;
+}
+.result-card.loading-card .spinner { margin-bottom: 10px; }

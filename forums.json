@@ -1,0 +1,26 @@
+[
+    {
+        "id": "identificacion",
+        "title": "Identificación de Plantas",
+        "description": "¿No estás seguro de qué planta tienes? ¡Pregunta aquí!",
+        "icon": "❓"
+    },
+    {
+        "id": "cultivo",
+        "title": "Consejos de Cultivo",
+        "description": "Comparte tus secretos para un jardín saludable.",
+        "icon": "🌱"
+    },
+    {
+        "id": "remedios",
+        "title": "Remedios Caseros",
+        "description": "Discusiones sobre el uso de plantas medicinales.",
+        "icon": "🧪"
+    },
+    {
+        "id": "plagas",
+        "title": "Plagas y Enfermedades",
+        "description": "Ayuda para combatir problemas en tus plantas.",
+        "icon": "🐛"
+    }
+]

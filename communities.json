@@ -1,0 +1,20 @@
+[
+    {
+        "id": "suculentas",
+        "name": "Amantes de las Suculentas",
+        "description": "Un espacio para compartir fotos, consejos y cuidados sobre estas fascinantes plantas.",
+        "banner": "/images/communities/fgg.jpeg"
+    },
+    {
+        "id": "huertos",
+        "name": "Huertos Urbanos",
+        "description": "Cultiva tus propios alimentos en la ciudad. ¡Comparte tus éxitos y aprende de los demás!",
+        "banner": "https://revolucionrenovable.wordpress.com/wp-content/uploads/2014/12/riverpark_verdequetequieroverde_img1.jpg?w=547&h=365"
+    },
+    {
+        "id": "aromaticas",
+        "name": "Hierbas Aromáticas y Medicinales",
+        "description": "Todo sobre el cultivo y uso de hierbas para la cocina, la salud y el bienestar.",
+        "banner": "https://www.intagri.com/assets/images/articulos/categoria1/7Hortalizas/art672-cultivo-pam/plantas-aromaticas.jpg"
+    }
+]

@@ -1,0 +1,28 @@
+/* --- ESTILOS DE UTILIDAD GENERAL --- */
+
+/*
+   Este archivo es para clases de ayuda reutilizables.
+   Puedes añadir clases aquí a medida que las necesites.
+   Ejemplos:
+
+   .text-center {
+       text-align: center !important;
+   }
+
+   .mt-1 { margin-top: 0.5rem !important; }
+   .mb-2 { margin-bottom: 1rem !important; }
+   .p-1 { padding: 0.5rem !important; }
+
+   .d-none { display: none !important; }
+   .d-block { display: block !important; }
+
+   etc.
+*/
+
+/* --- POSIBLES CLASES ÚTILES DE TU CSS ORIGINAL --- */
+
+/* (Si encuentras alguna regla suelta en tu style.css después de limpiarlo,
+   que parezca una utilidad general, puedes moverla aquí) */
+
+/* Ejemplo: Si tenías un estilo global para ocultar algo */
+/* .hidden { display: none; } */

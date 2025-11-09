@@ -1,0 +1,65 @@
+Texto para index html
+<script type="module" src="/js/seed-plants.js"></script>
+
+
+
+   <script type="module" src="/js/app.js"></script>
+</head>
+
+</body>
+</html>
+
+ruelks para la firebase:
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // === REGLAS TEMPORALES PARA BORRAR DESDE CONSOLA ===
+    match /plants/{docId}       { allow read: if true; allow write: if true; }
+    match /forums/{docId}       { allow read: if true; allow write: if true; }
+    match /communities/{docId}  { allow read: if true; allow write: if true; }
+    match /campaigns/{docId}    { allow read: if true; allow write: if true; } // <-- CAMBIO AQUÍ
+    match /appData/{docId}      { allow read: if true; allow write: if true; } // Como chatdata
+
+    // Perfiles de Usuario (Lectura pública, escritura solo el dueño)
+    match /userProfiles/{userId} {
+      allow read: if true;
+      allow write: if request.auth != null && request.auth.uid == userId; // Solo el dueño puede escribir
+    }
+
+    // Niega el acceso a cualquier otra colección por si acaso
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
+\
+
+
+
+desactivar
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // === REGLAS SEGURAS PERMANENTES (CON PERFILES PUBLICOS) ===
+    match /plants/{docId}       { allow read: if true; allow write: if false; }
+    match /forums/{docId}       { allow read: if true; allow write: if false; }
+    match /communities/{docId}  { allow read: if true; allow write: if false; }
+    match /campaigns/{docId}    { allow read: if true; allow write: if false; } // <-- VERSIÓN SEGURA
+    match /appData/{docId}      { allow read: if true; allow write: if false; } // Como chatdata
+
+    // Perfiles de Usuario (Lectura pública, escritura solo el dueño)
+    match /userProfiles/{userId} {
+      allow read: if true;
+      allow write: if request.auth != null && request.auth.uid == userId; // Solo el dueño puede escribir
+    }
+
+    // Niega el acceso a cualquier otra colección por si acaso
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

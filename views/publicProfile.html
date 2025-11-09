@@ -1,0 +1,39 @@
+<section id="publicProfileSection" class="content-section">
+    <button class="button-secondary js-back-btn" style="margin-bottom: 1.5rem;">&larr; Volver</button>
+
+    <div class="profile-container" id="publicProfileContainer">
+        <div class="profile-card">
+            <div class="profile-header">
+                <div id="publicProfilePictureContainer">
+                    <img id="publicProfilePictureImg" src="https://placehold.co/150x150/4CAF50/FFFFFF?text=LP" alt="Foto de perfil" loading="lazy">
+                </div>
+                <div id="publicProfileInfo">
+                    <h2 id="publicProfileUsername">Cargando...</h2>
+                    </div>
+            </div>
+        </div>
+
+        <div class="profile-card">
+            <h3>Biografía</h3>
+            <div class="profile-bio-section">
+                <p id="publicProfileBioText" style="color: var(--secondary-text-color); line-height: 1.6;">Cargando biografía...</p>
+            </div>
+        </div>
+
+        <div class="profile-card">
+            <h3>Insignias Obtenidas</h3>
+            <div id="publicBadgesContainer" class="badges-grid">
+                <div class="spinner-container" style="min-height: 50px;"><div class="spinner"></div></div>
+            </div>
+        </div>
+
+        </div>
+
+    <div id="profileNotFoundMessage" class="empty-state" style="display: none;">
+         <span class="material-symbols-outlined" style="font-size: 4em; margin-bottom: 1rem;">person_off</span>
+         <h3>Usuario no encontrado</h3>
+         <p>No pudimos encontrar el perfil que estás buscando.</p>
+         <button class="button-primary" data-navigate="/explorar">Volver a Explorar</button>
+     </div>
+
+</section>

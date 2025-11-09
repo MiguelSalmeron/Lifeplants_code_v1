@@ -1,0 +1,361 @@
+/* --- ESTILOS PARA MODALES --- */
+
+/* Contenedor principal del modal (fondo oscuro) */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1001;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+/* Estado activo del modal */
+.modal.active {
+    display: flex;
+    opacity: 1;
+}
+
+/* Contenido interno del modal (la caja blanca) */
+.modal-content {
+    background-color: var(--card-bg-color);
+    padding: 30px;
+    border: 1px solid var(--border-color);
+    width: 90%;
+    max-width: 500px;
+    border-radius: var(--border-radius-medium);
+    position: relative;
+    transform: scale(0.95);
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: var(--shadow-medium);
+}
+/* Animación al abrir */
+.modal.active .modal-content {
+    transform: scale(1);
+}
+
+/* Botón de cerrar ('x') */
+.close-modal-button {
+    color: var(--secondary-text-color);
+    position: absolute;
+    top: 12px;
+    right: 18px;
+    font-size: 32px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.2s ease;
+    line-height: 1;
+}
+
+.close-modal-button:hover {
+    color: var(--text-color);
+}
+
+/* Título del modal */
+.modal-content h2 {
+    margin-top: 0;
+    font-size: 1.8em;
+    margin-bottom: 1.5rem;
+    color: var(--text-color);
+    text-align: center;
+}
+
+/* --- ESTILOS PARA FORMULARIOS DENTRO DE MODALES --- */
+
+.modal-content form label {
+    display: block;
+    margin: 15px 0 8px;
+    font-weight: 500;
+    color: var(--text-color);
+    font-size: 0.95em;
+}
+
+.modal-content form input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 5px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-small);
+    box-sizing: border-box;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-size: 1em;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+/* Estilo al enfocar el input */
+.modal-content form input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+    outline: none;
+}
+
+/* Botón de envío del formulario */
+.modal-content form button[type="submit"] {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 14px 18px;
+    border: none;
+    border-radius: var(--border-radius-small);
+    cursor: pointer;
+    font-size: 1.05em;
+    width: 100%;
+    font-weight: 600;
+    margin-top: 20px;
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.modal-content form button[type="submit"]:hover {
+    background-color: var(--primary-hover-color);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Mensaje de error del formulario */
+.form-error-message {
+    color: #dc3545;
+    font-size: 0.85em;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    min-height: 1.2em;
+    display: block;
+}
+
+/* Separador "o" */
+.or-separator {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: var(--secondary-text-color);
+    margin: 18px 0;
+}
+.or-separator::before,
+.or-separator::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid var(--border-color);
+}
+.or-separator:not(:empty)::before { margin-right: .5em; }
+.or-separator:not(:empty)::after { margin-left: .5em; }
+
+/* Botón de login con Google */
+.google-login-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    width: 100%;
+    padding: 12px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: var(--border-radius-small);
+    font-size: 1em;
+    font-weight: 500;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    transition: all 0.2s ease;
+    color: var(--text-color);
+}
+
+.google-login-button:hover {
+    background-color: #f8f8f8;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+.google-login-button img {
+    width: 20px;
+    height: 20px;
+}
+
+/* Enlace para cambiar entre login y registro */
+.modal-switch-link {
+    display: block;
+    text-align: center;
+    margin-top: 20px;
+    font-size: 0.95em;
+    color: var(--primary-color);
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.modal-switch-link:hover {
+    color: var(--primary-hover-color);
+    text-decoration: underline;
+}
+
+/* --- ESTILOS ESPECÍFICOS PARA MODALES --- */
+
+/* Modal de Cámara */
+.camera-modal-content {
+    padding: 10px;
+    max-width: 90vw;
+    width: auto;
+    background-color: #000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--border-radius-medium);
+}
+
+#cameraFeed {
+    width: 100%;
+    max-width: 600px;
+    height: auto;
+    border-radius: var(--border-radius-medium);
+}
+
+/* Botón de captura (círculo) */
+.capture-btn {
+    position: absolute;
+    bottom: 25px;
+    background-color: rgba(255, 255, 255, 0.9);
+    border: 5px solid rgba(0, 0, 0, 0.2);
+    border-radius: 50%;
+    width: 70px;
+    height: 70px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    padding: 0;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+.capture-btn:active {
+    transform: scale(0.9);
+}
+/* Botón 'x' para cerrar modal de cámara */
+#closeCameraModal {
+    color: rgba(255, 255, 255, 0.8);
+}
+#closeCameraModal:hover {
+     color: white;
+}
+
+
+/* Modal de Campaña */
+.campaign-modal-icon {
+    font-size: 56px;
+    color: var(--primary-color);
+    display: block;
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.campaign-modal-title {
+    text-align: center;
+    font-size: 2em;
+    margin-bottom: 1.2rem;
+}
+
+#campaignModal .modal-content p {
+    text-align: center;
+    line-height: 1.7;
+    color: var(--secondary-text-color);
+    font-size: 1em;
+    margin-bottom: 1rem;
+}
+
+/* Barra de progreso de la campaña */
+.campaign-progress {
+    margin-top: 2.5rem;
+    margin-bottom: 2rem;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 14px;
+    background-color: var(--hover-bg-color);
+    border-radius: var(--border-radius-large);
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+}
+
+.progress-bar-fill {
+    height: 100%;
+    background-color: var(--primary-color);
+    border-radius: var(--border-radius-large);
+    transition: width 0.5s ease-in-out;
+}
+
+/* Texto debajo de la barra de progreso */
+.campaign-progress p {
+    text-align: center;
+    margin-top: 0.8rem;
+    font-size: 0.95em;
+    color: var(--secondary-text-color);
+}
+.campaign-progress p strong {
+    color: var(--text-color);
+    font-weight: 600;
+}
+
+/* Botón "Unirme" / "Participando" en el modal de campaña */
+#joinCampaignBtn.large {
+    width: 100%;
+    padding: 16px 24px;
+    font-size: 1.15em;
+    border-radius: var(--border-radius-large);
+    font-weight: 600;
+}
+
+/* Estilo para el botón cuando ya se ha unido */
+.button-primary.joined {
+    background-color: var(--secondary-text-color);
+    border-color: var(--secondary-text-color);
+    cursor: not-allowed;
+    box-shadow: none;
+    opacity: 0.7;
+}
+.button-primary.joined:hover {
+    background-color: var(--secondary-text-color);
+    box-shadow: none;
+}
+
+/* --- ESTILOS ADICIONALES PARA ESTADÍSTICAS EN MODAL CAMPAÑA --- */
+
+.campaign-stats {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-top: 1.5rem;
+    margin-bottom: 2rem;
+    padding: 1rem 0;
+    border-top: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+    flex-wrap: wrap;
+}
+
+.stat-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1em;
+    color: var(--secondary-text-color);
+    text-align: center;
+}
+
+.stat-item .material-symbols-outlined {
+    font-size: 1.5em;
+    color: var(--primary-color);
+}
+
+.stat-item span:last-child {
+    font-weight: 500;
+    color: var(--text-color);
+}
+
+/* Ajuste responsivo opcional */
+@media (max-width: 480px) {
+    .campaign-stats {
+        gap: 1rem;
+        justify-content: space-around;
+    }
+    .stat-item {
+        font-size: 0.9em;
+    }
+}

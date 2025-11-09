@@ -1,0 +1,28 @@
+{
+    "forumMessages": {
+        "identificacion": [
+            { "user": "Ana", "text": "Hola a todos, ¿alguien puede ayudarme a identificar esta planta?", "type": "received" },
+            { "user": "Carlos", "text": "Claro, sube una foto.", "type": "received" },
+            { "user": "You", "text": "Aquí está la foto que tomé esta mañana.", "type": "sent" }
+        ],
+        "cultivo": [
+            { "user": "Laura", "text": "Mis tomates no crecen, ¿algún consejo?", "type": "received" }
+        ],
+        "remedios": [
+            { "user": "Pedro", "text": "¿Alguien ha probado el té de jengibre para el resfriado?", "type": "received" }
+        ],
+        "plagas": [
+            { "user": "Sofia", "text": "Tengo pulgones en mis rosales. ¿Qué hago?", "type": "received" }
+        ]
+    },
+    "communityChannels": {
+        "suculentas": {
+            "general": [{ "user": "Admin", "text": "¡Bienvenidos a la comunidad de suculentas!", "type": "received" }],
+            "fotos": [{ "user": "Maria", "text": "Miren mi nueva Echeveria.", "type": "received" }]
+        },
+        "huertos": {
+            "general": [{ "user": "Admin", "text": "¡Bienvenidos al grupo de huertos urbanos!", "type": "received" }],
+            "dudas": [{ "user": "Juan", "text": "¿Es buen momento para plantar zanahorias?", "type": "received" }]
+        }
+    }
+}

@@ -1,0 +1,49 @@
+<section id="onboardingSection" class="content-section">
+    <div class="profile-container" style="max-width: 700px; margin-top: 2rem;">
+
+        <form id="onboardingForm" class="profile-card">
+
+            <div style="text-align: center; margin-bottom: 1.5rem;">
+                <img src="logo1.png" alt="Logo Life Plants" style="width: 60px; height: 60px; margin-bottom: 1rem;">
+                <h1 style="margin: 0;">¡Bienvenido a LifePlants!</h1>
+                <p style="font-size: 1.1em; color: var(--secondary-text-color);">Terminemos de configurar tu perfil.</p>
+            </div>
+
+            <div class="profile-header" style="justify-content: center; margin-bottom: 2rem;">
+                <div id="profilePictureContainer">
+                    <img id="profilePicturePreview" src="https://placehold.co/150x150/4CAF50/FFFFFF?text=LP" alt="Foto de perfil" loading="lazy" style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover; border: 3px solid var(--border-color);">
+
+                    <button type="button" id="changeProfilePicBtn" aria-label="Cambiar foto de perfil">
+                        <span class="material-symbols-outlined">edit</span>
+                    </button>
+
+                    <input type="file" id="profilePictureUpload" accept="image/*" style="display: none;">
+                </div>
+            </div>
+
+            <div class="form-field">
+                <label for="displayNameInput">Nombre</label>
+                <input type="text" id="displayNameInput" placeholder="Tu nombre completo" required>
+            </div>
+
+            <div class="form-field">
+                <label for="usernameInput">Nombre de Usuario (público)</label>
+                <div style="position: relative;">
+                    <span style="position: absolute; left: 12px; top: 12px; font-size: 1em; color: var(--secondary-text-color);">@</span>
+                    <input type="text" id="usernameInput" placeholder="tu_usuario_unico" required pattern="^[a-zA-Z0-9_.]+$" style="padding-left: 28px;">
+                </div>
+                <p id="usernameStatus" style="font-size: 0.85em; margin-top: 5px; min-height: 1.2em;"></p>
+            </div>
+
+            <div class="form-field">
+                <label for="bioTextarea">Biografía (opcional)</label>
+                <textarea id="bioTextarea" placeholder="Escribe un poco sobre ti..." rows="4"></textarea>
+            </div>
+
+            <div class="button-group" style="margin-top: 2rem; border-top: 1px solid var(--border-color); padding-top: 1.5rem;">
+                <button type="submit" class="button-primary" style="width: 100%; padding: 14px; font-size: 1.1em;">Finalizar y Unirme</button>
+            </div>
+
+        </form>
+    </div>
+</section>
