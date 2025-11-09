@@ -24,6 +24,10 @@
         "region": ["europa"],
         "tipo": "hierba",
         "uso": ["medicinal"]
+        "family": "Amaryllidaceae" ,
+        "howToUse" : "Crudo, cocido, aceite, suplementos."," 
+        "warnings" : "Consultar medico si se toma anticoagulantes. No consumir en exceso."
+        
     },
     "boldo": {
         "name": "Boldo",
@@ -37,6 +41,7 @@
         "region": ["america_sur"],
         "tipo": "arbol",
         "uso": ["medicinal"]
+
     },
     "canela": {
         "name": "Canela",
@@ -50,6 +55,7 @@
         "region": ["asia", "global"],
         "tipo": "arbol",
         "uso": ["comestible", "medicinal"]
+
     },
     "curcuma": {
         "name": "Cúrcuma",
@@ -89,5 +95,18 @@
         "region": ["america_central", "america_sur"],
         "tipo": "arbol",
         "uso": ["medicinal", "comestible"]
+   
+    },
+    "Manzanilla": {
+        "name": "Manzanilla",
+        "scientificName": "Matricaria chamomilla","
+        "whatIs": "Una planta herbacea de la familia de las compuestas, conocida por sus flores blancas.","
+        "whatIsItfor": "se usa para tratar problemas digestivos, insomnio, y como sedante.","
+        "imageCard": "https://farmazara.es/blog/wp-content/uploads/2023/09/primer-plano-manzanilla-blanca-naturaleza-o-jardin-fondo-floral.jpg.webp"
+        "longDescriptoion": "La manzanilla es una planta herbácea aromática perteneciente a la familia de las compuestas o asteráceas, ampliamente conocida por sus flores blancas con centro amarillo que recuerdan a pequeñas margaritas y por su agradable aroma dulce. Su tallo es delgado, erguido y muy ramificado, con hojas finamente divididas de color verde claro que le dan un aspecto plumoso. Alcanza entre 15 y 60 centímetros de altura y suele florecer durante la primavera y el verano, especialmente en climas templados y soleados, donde crece de manera silvestre en campos, bordes de caminos y terrenos cultivados. Existen principalmente dos especies utilizadas con fines medicinales y domésticos: la manzanilla alemana (Matricaria chamomilla o Matricaria recutita), de ciclo anual y la más usada para infusiones, y la manzanilla romana (Chamaemelum nobile), perenne y más aromática, empleada en cosmética y aceites esenciales. Sus flores son la parte más valiosa de la planta, ya que concentran aceites esenciales como el camazuleno y el bisabolol, además de flavonoides y compuestos fenólicos con propiedades antiinflamatorias, digestivas, sedantes y antiespasmódicas. Desde la antigüedad, ha sido utilizada en la medicina tradicional para aliviar molestias estomacales, cólicos, gases, indigestión y para calmar los nervios o favorecer el sueño, además de aplicarse externamente en compresas o baños por sus efectos calmantes y cicatrizantes sobre la piel y los ojos. Su infusión es una de las más populares en el mundo, tanto por su sabor suave como por sus beneficios para la salud, y también se emplea en el cuidado capilar por su capacidad para aclarar y dar brillo al cabello. La manzanilla representa una de las plantas medicinales más antiguas y apreciadas, símbolo de sencillez y bienestar natural, aunque su uso debe ser moderado en personas alérgicas a otras especies de la misma familia vegetal o en mujeres embarazadas.","
+        "benefits": "reduce la ansiedad, alivia problemas digestivos,mejora el sueno,propiedades cictrizantes,antiinflamatorias,antiespasmodicas.","
+        side "
+        
+        
     }
 }
