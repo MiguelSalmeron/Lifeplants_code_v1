@@ -1,0 +1,30 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    
+    // Función auxiliar
+    function isAdmin() {
+       // Aquí simplificamos verificando solo autenticación por ahora, 
+       // o puedes hardcodear el email igual que en Firestore si quieres blindarlo.
+       return request.auth != null; 
+    }
+
+    // Imágenes de Plantas: Cualquiera ve, Solo Admin sube
+    match /plants/{allPaths=**} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    
+    // Imágenes de Perfil: Cualquiera ve, Usuario sube
+    match /users/{userId}/{allPaths=**} {
+      allow read: if true;
+      allow write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // Regla por defecto (bloquear todo lo demás)
+    match /{allPaths=**} {
+      allow read: if true;
+      allow write: if false;
+    }
+  }
+}

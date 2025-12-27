@@ -6,8 +6,8 @@ import { renderPlantGrid, updateFavoriteButtonVisual, renderPlantOfTheWeek, rend
 import { renderCampaignCards } from './ui/communityUI.js';
 import { showIdentifierLoading, renderIdentificationResults } from './ui/identifierUI.js';
 import { auth, db } from './firebase-config.js';
-import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.7/firebase-auth.js";
-import { getDoc, doc } from "https://www.gstatic.com/firebasejs/9.6.7/firebase-firestore.js";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { getDoc, doc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 import { COLLECTIONS } from './constants.js';
 import { awardBadge, createUserProfileDocument, updateUserFavorites, updateUserCampaigns } from './profile.js';
 import { identifyWithInaturalist } from './plant-identifier.js';
@@ -140,13 +140,13 @@ export function handleQuickSearch(searchTerm) {
 
     for (const key in allPlants) {
         const plant = allPlants[key];
-        const nameMatch = plant.name.toLowerCase().includes(term);
-        const scientificMatch = plant.scientificName?.toLowerCase().includes(term);
+        const safeName = (plant.name || "").toLowerCase();
+        const safeScientific = (plant.scientificName || "").toLowerCase();
 
-        if (nameMatch || scientificMatch) {
+        if (safeName.includes(term) || safeScientific.includes(term)) {
             results.push({
                 type: 'Planta',
-                name: plant.name,
+                name: plant.name || "Sin Nombre",
                 key: key,
                 path: `/planta/${key}`
             });
@@ -161,8 +161,11 @@ export function handleQuickSearch(searchTerm) {
 
     if (results.length < maxResults) {
         for (const item of allTopics) {
-             const titleMatch = item.name?.toLowerCase().includes(term) || item.title?.toLowerCase().includes(term) || item.description?.toLowerCase().includes(term);
-             if (titleMatch) {
+             const safeName = (item.name || "").toLowerCase();
+             const safeTitle = (item.title || "").toLowerCase();
+             const safeDesc = (item.description || "").toLowerCase();
+             
+             if (safeName.includes(term) || safeTitle.includes(term) || safeDesc.includes(term)) {
                  results.push(item);
                  if (results.length >= maxResults) break;
              }
@@ -171,7 +174,6 @@ export function handleQuickSearch(searchTerm) {
 
     renderQuickSearchResults(results);
 }
-
 
 export function handleFilterChange() {
     const searchInput = document.getElementById('exploreSearchInput');
@@ -187,10 +189,15 @@ export function handleFilterChange() {
 
     let filteredKeys = Object.keys(state.allPlants).filter(key => {
         const plant = state.allPlants[key];
-        const nameMatch = plant.name.toLowerCase().includes(searchTerm);
+        if (!plant) return false;
+
+        const safeName = (plant.name || "").toLowerCase();
+        const nameMatch = safeName.includes(searchTerm);
+        
         const usoMatch = usoFilter === 'todos' || (plant.uso && plant.uso.includes(usoFilter));
         const regionMatch = regionFilter === 'todos' || (plant.region && plant.region.includes(regionFilter));
         const tipoMatch = tipoFilter === 'todos' || plant.tipo === tipoFilter;
+        
         return nameMatch && usoMatch && regionMatch && tipoMatch;
     });
 
@@ -198,17 +205,20 @@ export function handleFilterChange() {
         const plantA = state.allPlants[keyA];
         const plantB = state.allPlants[keyB];
 
+        const nameA = (plantA.name || "").toLowerCase();
+        const nameB = (plantB.name || "").toLowerCase();
+
         if (orderValue === 'name_asc') {
-            return plantA.name.localeCompare(plantB.name);
+            return nameA.localeCompare(nameB);
         } else if (orderValue === 'name_desc') {
-            return plantB.name.localeCompare(plantA.name);
+            return nameB.localeCompare(nameA);
         } else if (orderValue === 'popularidad') {
             const countA = state.favorites.filter(favKey => favKey === keyA).length;
             const countB = state.favorites.filter(favKey => favKey === keyA).length;
             if (countB !== countA) {
                 return countB - countA;
             }
-            return plantA.name.localeCompare(plantB.name); 
+            return nameA.localeCompare(nameB); 
         }
         return 0;
     });
@@ -217,11 +227,21 @@ export function handleFilterChange() {
 }
 
 export function resetFilters() {
-    document.getElementById('exploreSearchInput').value = '';
-    document.getElementById('filterUso').value = 'todos';
-    document.getElementById('filterRegion').value = 'todos';
-    document.getElementById('filterTipo').value = 'todos';
-    document.getElementById('filterOrder').value = 'name_asc';
+    const searchInput = document.getElementById('exploreSearchInput');
+    if(searchInput) searchInput.value = '';
+    
+    const fUso = document.getElementById('filterUso');
+    if(fUso) fUso.value = 'todos';
+
+    const fRegion = document.getElementById('filterRegion');
+    if(fRegion) fRegion.value = 'todos';
+
+    const fTipo = document.getElementById('filterTipo');
+    if(fTipo) fTipo.value = 'todos';
+
+    const fOrder = document.getElementById('filterOrder');
+    if(fOrder) fOrder.value = 'name_asc';
+    
     handleFilterChange();
 }
 
@@ -234,7 +254,7 @@ export async function handleImageIdentification(file) {
         const results = await identifyWithInaturalist(file);
         renderIdentificationResults(results, 'inaturalist');
     } catch (error) {
-        console.error("Error en la identificación:", error);
+        console.error(error);
         import('./ui/modalUI.js').then(modal => modal.showToast(`Error de identificación: ${error.message}`, "error"));
         renderIdentificationResults([], 'error');
     }
@@ -242,11 +262,11 @@ export async function handleImageIdentification(file) {
 
 async function init() {
     const data = await fetchAllData();
-    state.allPlants = data.allPlants;
-    state.forums = data.forums;
-    state.communities = data.communities;
-    state.campaigns = data.campaigns;
-    state.chatData = data.chatData;
+    state.allPlants = data.allPlants || {}; 
+    state.forums = data.forums || [];
+    state.communities = data.communities || [];
+    state.campaigns = data.campaigns || [];
+    state.chatData = data.chatData || {};
 
     populateFilterOptions(state.allPlants);
 
@@ -280,7 +300,7 @@ async function init() {
                     state.userCampaigns = profileData.userCampaigns || [];
                 }
             } catch (error) {
-                console.error("Error al buscar perfil de Firestore en init:", error);
+                console.error(error);
                 state.favorites = [];
                 state.userCampaigns = [];
             }
@@ -301,11 +321,15 @@ async function init() {
 
     const loader = document.getElementById('loader');
     const mainContainerWrapper = document.querySelector('.main-container-wrapper');
-    loader.style.opacity = '0';
-    loader.addEventListener('transitionend', () => {
-        loader.style.display = 'none';
+    if (loader) {
+        loader.style.opacity = '0';
+        loader.addEventListener('transitionend', () => {
+            loader.style.display = 'none';
+            if(mainContainerWrapper) mainContainerWrapper.style.visibility = 'visible';
+        }, { once: true });
+    } else if (mainContainerWrapper) {
         mainContainerWrapper.style.visibility = 'visible';
-    }, { once: true });
+    }
 }
 
 document.addEventListener('DOMContentLoaded', init);

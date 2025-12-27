@@ -5,7 +5,7 @@ import {
     signInWithEmailAndPassword,
     signOut,
     updateProfile
-} from "https://www.gstatic.com/firebasejs/9.6.7/firebase-auth.js";
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import { auth } from './firebase-config.js';
 import { showToast } from './ui/modalUI.js';
 import { createUserProfileDocument } from './profile.js';
@@ -22,7 +22,7 @@ function clearAuthErrors() {
     if(regEmailError) regEmailError.textContent = '';
     if(regPasswordError) regPasswordError.textContent = '';
     if(loginEmailError) loginEmailError.textContent = '';
-    if(passwordPasswordError) loginPasswordError.textContent = '';
+    if(loginPasswordError) loginPasswordError.textContent = '';
 }
 
 function showAuthError(errorCode, formType) {

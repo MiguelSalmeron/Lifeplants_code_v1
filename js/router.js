@@ -1,5 +1,5 @@
 import { auth, db } from './firebase-config.js';
-import { getDoc, doc } from "https://www.gstatic.com/firebasejs/9.6.7/firebase-firestore.js";
+import { getDoc, doc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 import { COLLECTIONS } from './constants.js';
 import * as PlantUI from './ui/plantUI.js';
 import * as CommunityUI from './ui/communityUI.js';
@@ -108,7 +108,8 @@ function handleCampaignRoute(path, campaigns, userCampaigns) {
 
     const isJoined = userCampaigns.includes(campaignId);
     if (!isJoined) {
-        showToast("Debes unirte a la campaña para ver su progreso.", "warning");
+        // En lugar de showToast, podrías redirigir o mostrar un modal
+        console.warn("Usuario no unido a la campaña");
         navigate('/campana');
         return null;
     }
@@ -121,12 +122,12 @@ function handleCampaignRoute(path, campaigns, userCampaigns) {
     };
 }
 
-
 export async function handleRouting(state) {
     const path = window.location.pathname;
     const appRoot = document.getElementById('app-root');
     if (!appRoot) return;
 
+    // Spinner simple mientras carga la ruta
     appRoot.innerHTML = '<div class="spinner-container"><div class="spinner"></div></div>';
 
     if (path === '/configurar-perfil') {
@@ -137,6 +138,7 @@ export async function handleRouting(state) {
 
     const user = auth.currentUser;
 
+    // Lógica de Onboarding
     if (user) {
         try {
             const userDocRef = doc(db, COLLECTIONS.USER_PROFILES, user.uid);
@@ -158,7 +160,7 @@ export async function handleRouting(state) {
                 return;
             }
         } catch (error) {
-            console.error("Error grave en el enrutador de bienvenida:", error);
+            console.error("Error en enrutador de bienvenida:", error);
         }
     }
 
@@ -236,7 +238,6 @@ export async function handleRouting(state) {
         if (routeConfig.guard === undefined && (routeConfig.view === 'favoritos' || routeConfig.view === 'perfil') && !user) {
              const loginModal = document.getElementById('loginModal');
              if(loginModal) loginModal.classList.add('active');
-             console.log('Acceso denegado, redirigiendo a Home.');
              return navigate('/');
         }
 
@@ -253,8 +254,7 @@ export async function handleRouting(state) {
                 try {
                     routeConfig.action(state);
                 } catch (error) {
-                    console.error(`Error al ejecutar la acción para la ruta ${path} (después de renderizar):`, error);
-                    appRoot.innerHTML = '<p>Ocurrió un error al cargar esta sección.</p>';
+                    console.error(`Error en acción de ruta ${path}:`, error);
                 }
             }
         });

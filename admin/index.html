@@ -1,0 +1,105 @@
+-<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LifePlants Admin | Acceso Restringido</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <link rel="stylesheet" href="./styles/admin.css">
+</head>
+<body>
+
+    <div id="auth-container" class="auth-container">
+        <div class="login-card">
+            <div class="brand">
+                <span class="material-symbols-outlined">shield_person</span>
+                <h1>Admin Access</h1>
+            </div>
+            <p>Panel de Gestión de LifePlants</p>
+            <button id="googleLoginBtn" class="google-btn">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="Google">
+                <span>Acceder con Google</span>
+            </button>
+            <p id="loginError" class="error-msg"></p>
+        </div>
+    </div>
+
+    <div id="pin-container" class="auth-container" style="display: none;">
+        <div class="login-card">
+            <div class="brand">
+                <span class="material-symbols-outlined">lock</span>
+                <h1>Seguridad Extra</h1>
+            </div>
+            <p>Hola, <span id="pinUserName">Usuario</span>. Confirma tu identidad.</p>
+            
+            <form id="pinForm" class="pin-form">
+                <input type="password" id="securityPinInput" placeholder="Ingresa el PIN maestro" maxlength="6" autocomplete="off">
+                <button type="submit" class="btn-primary" style="width: 100%; margin-top: 1rem;">Desbloquear</button>
+            </form>
+            
+            <button id="cancelAuthBtn" class="btn-link" style="margin-top: 1rem;">Cancelar</button>
+            <p id="pinError" class="error-msg"></p>
+        </div>
+    </div>
+
+    <div id="admin-dashboard" class="dashboard-container" style="display: none;">
+        
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>LifePlants</h2>
+                <span class="badge">ADMIN</span>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <button class="nav-item active" data-view="dashboard">
+                    <span class="material-symbols-outlined">dashboard</span>
+                    Resumen
+                </button>
+                <button class="nav-item" data-view="plants">
+                    <span class="material-symbols-outlined">potted_plant</span>
+                    Plantas
+                </button>
+                <button class="nav-item" data-view="campaigns">
+                    <span class="material-symbols-outlined">campaign</span>
+                    Campañas
+                </button>
+                <button class="nav-item" data-view="users">
+                    <span class="material-symbols-outlined">group</span>
+                    Usuarios
+                </button>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="user-mini-profile">
+                    <img id="adminAvatar" src="" alt="Admin">
+                    <div class="user-info">
+                        <span id="adminName">Cargando...</span>
+                        <small id="adminEmail">...</small>
+                    </div>
+                </div>
+                <button id="logoutBtn" class="logout-btn" title="Cerrar Sesión">
+                    <span class="material-symbols-outlined">logout</span>
+                </button>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="top-bar">
+                <h2 id="pageTitle">Resumen</h2>
+                <div class="actions">
+                    <button class="icon-btn"><span class="material-symbols-outlined">notifications</span></button>
+                </div>
+            </header>
+
+            <div id="content-area" class="content-area">
+                <div class="spinner-container">
+                    <div class="spinner"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script type="module" src="./js/admin-app.js"></script>
+</body>
+</html>

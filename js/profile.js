@@ -1,7 +1,7 @@
 import {
     doc, setDoc, getDoc, updateDoc, arrayUnion, collection, query, where, getDocs, arrayRemove
-} from "https://www.gstatic.com/firebasejs/9.6.7/firebase-firestore.js";
-import { ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.6.7/firebase-storage.js";
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
 import { db, storage, auth } from './firebase-config.js';
 import { showToast } from './ui/modalUI.js';
 import { COLLECTIONS } from './constants.js';
