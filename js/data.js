@@ -2,19 +2,28 @@ import { db } from './firebase-config.js';
 import { collection, getDocs, getDoc, doc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 import { COLLECTIONS, DOCUMENT_IDS } from './constants.js';
 
+function normalizeFirebaseStorageUrl(url) {
+    if (!url || typeof url !== 'string') return '';
+    if (!url.includes('firebasestorage.googleapis.com')) return url;
+    if (url.includes('alt=media')) return url;
+    if (url.includes('?')) return url + '&alt=media';
+    return url + '?alt=media';
+}
+
 async function fetchObjectCollection(collectionName) {
     try {
         const querySnapshot = await getDocs(collection(db, collectionName));
         const data = {};
-        querySnapshot.forEach((doc) => {
-            const docData = doc.data();
-            // Adaptador: Mapear campos del Admin (snake_case) al Frontend (camelCase)
-            data[doc.id] = { 
-                id: doc.id, 
-                ...docData, 
-                // Mapeo de seguridad: Si viene del Admin (common_name), úsalo como name.
+        querySnapshot.forEach((docSnap) => {
+            const docData = docSnap.data() || {};
+            const rawImage = docData.image || docData.imageCard || "";
+            const normalizedImage = normalizeFirebaseStorageUrl(rawImage);
+
+            data[docSnap.id] = {
+                id: docSnap.id,
+                ...docData,
                 name: docData.common_name || docData.name || "Sin nombre",
-                imageCard: docData.image || docData.imageCard || "images/logo2.png",
+                imageCard: normalizedImage || "images/logo2.png",
                 scientificName: docData.scientific_name || docData.scientificName || "",
                 whatIsItFor: docData.description || docData.whatIsItFor || "Información pendiente."
             };
@@ -30,9 +39,8 @@ async function fetchArrayCollection(collectionName) {
     try {
         const querySnapshot = await getDocs(collection(db, collectionName));
         const data = [];
-        querySnapshot.forEach((doc) => {
-            // Importante: Mezclar el ID del documento con sus datos
-            data.push({ id: doc.id, ...doc.data() });
+        querySnapshot.forEach((docSnap) => {
+            data.push({ id: docSnap.id, ...docSnap.data() });
         });
         return data;
     } catch (error) {
@@ -76,11 +84,11 @@ export async function fetchAllData() {
         };
     } catch (error) {
         console.error("Critical error loading initial data from Firestore:", error);
-        // Retornar estructura vacía para evitar crash en UI
         return {
             allPlants: {},
             forums: [],
             communities: [],
+            campaigns: [],
             campaigns: [],
             chatData: {}
         };
