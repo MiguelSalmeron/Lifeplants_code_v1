@@ -14,7 +14,7 @@ function renderPlantForm(container) {
             <form id="plantForm" class="admin-form">
                 <div class="form-group">
                     <label>Nombre Común</label>
-                    <input type="text" id="commonName" required placeholder="Ej: Montera Deliciosa">
+                    <input type="text" id="commonName" required placeholder="Ej: Monstera Deliciosa">
                 </div>
                 
                 <div class="form-group">
@@ -59,7 +59,6 @@ function renderPlantForm(container) {
         </div>
     `;
 
-    // Añadir estilos locales rápidos para este formulario
     const style = document.createElement('style');
     style.textContent = `
         .admin-form { display: flex; flex-direction: column; gap: 1rem; }
@@ -86,76 +85,76 @@ function setupListeners() {
     const statusMsg = document.getElementById('uploadStatus');
     const submitBtn = document.getElementById('submitBtn');
 
-    // Previsualizar imagen
     imageInput.addEventListener('change', (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                preview.style.display = 'block';
-                preview.innerHTML = `<img src="${e.target.result}" alt="Preview">`;
-            };
-            reader.readAsDataURL(file);
-        }
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = (evt) => {
+            preview.style.display = 'block';
+            preview.innerHTML = `<img src="${evt.target.result}" alt="Preview">`;
+        };
+        reader.readAsDataURL(file);
     });
 
-    // Enviar formulario
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
-        
-        // Bloquear botón
+
         submitBtn.disabled = true;
         submitBtn.innerHTML = '<div class="spinner" style="width:20px;height:20px;border-width:2px;"></div> Subiendo...';
         statusMsg.textContent = "Subiendo imagen a Storage...";
         statusMsg.style.color = "blue";
 
         try {
-            // 1. Obtener datos
-            const file = imageInput.files[0];
-            const commonName = document.getElementById('commonName').value;
-            const scientificName = document.getElementById('scientificName').value;
-            const family = document.getElementById('family').value;
-            const careLevel = document.getElementById('careLevel').value;
-            const description = document.getElementById('description').value;
+            const file = imageInput.files?.[0];
+            if (!file) {
+                throw new Error("Selecciona una imagen antes de publicar.");
+            }
 
-            // 2. Subir imagen
-            // Usamos Date.now() para evitar nombres duplicados
-            const storageRef = ref(storage, `plants/${Date.now()}_${file.name}`);
-            const snapshot = await uploadBytes(storageRef, file);
+            const commonName = document.getElementById('commonName').value.trim();
+            const scientificName = document.getElementById('scientificName').value.trim();
+            const family = document.getElementById('family').value.trim();
+            const careLevel = document.getElementById('careLevel').value;
+            const description = document.getElementById('description').value.trim();
+
+            const fileSafeName = file.name.replace(/[^\w.\-() ]+/g, '_');
+            const storagePath = `plants/${Date.now()}_${fileSafeName}`;
+            const storageRef = ref(storage, storagePath);
+
+            const snapshot = await uploadBytes(storageRef, file, { contentType: file.type || 'image/jpeg' });
             const downloadURL = await getDownloadURL(snapshot.ref);
 
             statusMsg.textContent = "Imagen lista. Guardando en Firestore...";
 
-            // 3. Guardar en Firestore
             await addDoc(collection(db, "plants"), {
                 common_name: commonName,
                 scientific_name: scientificName,
                 family: family,
                 difficulty: careLevel,
                 description: description,
-                image: downloadURL, // La URL de Firebase Storage
-                created_at: serverTimestamp()
+                image: downloadURL,
+                created_at: serverTimestamp(),
+                updated_at: serverTimestamp()
             });
 
-            // 4. Éxito
             statusMsg.textContent = "✅ ¡Planta publicada correctamente!";
             statusMsg.style.color = "green";
             form.reset();
             preview.style.display = 'none';
+            preview.innerHTML = '';
 
-            // Restaurar botón en 3 segundos
             setTimeout(() => {
                 statusMsg.textContent = "";
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = '<span class="material-symbols-outlined">cloud_upload</span> Publicar Planta';
-            }, 3000);
+            }, 2500);
 
         } catch (error) {
             console.error("Error al subir planta:", error);
-            statusMsg.textContent = "❌ Error: " + error.message;
+            statusMsg.textContent = "❌ Error: " + (error?.message || String(error));
             statusMsg.style.color = "red";
             submitBtn.disabled = false;
-            submitBtn.textContent = "Reintentar";
+            submitBtn.innerHTML = '<span class="material-symbols-outlined">refresh</span> Reintentar';
         }
     });
 }
