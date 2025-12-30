@@ -1,29 +1,16 @@
 import { auth, db } from '../../js/firebase-config.js';
 import { GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { collection, getDocs, query, limit } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { collection, getDocs, query } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 import { initPlantsModule } from './plants.js';
-
-// --- LISTA DE ACCESO SIMPLIFICADA ---
-// Solo Correo : PIN
-const AUTHORIZED_PINS = {
-    "miguel.salmeron.dev@gmail.com": "150709",
-    "anasofiapg10@gmail.com": "160210",
-    "smsg23112008@gmail.com": "231108"
-};
 
 // Referencias del DOM
 const authContainer = document.getElementById('auth-container');
-const pinContainer = document.getElementById('pin-container');
 const dashboardContainer = document.getElementById('admin-dashboard');
 
 const googleLoginBtn = document.getElementById('googleLoginBtn');
 const logoutBtn = document.getElementById('logoutBtn');
 const cancelAuthBtn = document.getElementById('cancelAuthBtn');
 
-const pinForm = document.getElementById('pinForm');
-const pinInput = document.getElementById('securityPinInput');
-const pinError = document.getElementById('pinError');
-const pinUserName = document.getElementById('pinUserName');
 const loginError = document.getElementById('loginError');
 
 const contentArea = document.getElementById('content-area');
@@ -39,25 +26,19 @@ let currentUser = null;
 function init() {
     setupAuthListener();
     setupEventListeners();
+    
+    // Ocultar contenedor de PIN si existe en el HTML para evitar confusión
+    const pinContainer = document.getElementById('pin-container');
+    if(pinContainer) pinContainer.style.display = 'none';
 }
 
 function setupAuthListener() {
     onAuthStateChanged(auth, (user) => {
         if (user) {
-            // LIMPIEZA TOTAL DEL CORREO (Minúsculas y sin espacios)
-            const email = user.email.toLowerCase().trim();
-            console.log("Intentando entrar con:", email); // Mira la consola si falla
-
-            // Verificamos si el correo existe en nuestra lista
-            if (AUTHORIZED_PINS.hasOwnProperty(email)) {
-                currentUser = user;
-                // Usamos el nombre de Google directamente
-                showPinScreen(user.displayName || "Admin");
-            } else {
-                console.warn("Bloqueado:", email);
-                loginError.innerHTML = `<b>Acceso Denegado</b><br>El correo ${email} no está autorizado.`;
-                signOut(auth);
-            }
+            currentUser = user;
+            // Ya no pedimos PIN, pasamos directo al Dashboard.
+            // Si el usuario NO es admin, las reglas de Firestore darán error al cargar datos.
+            showDashboard(user);
         } else {
             currentUser = null;
             showLogin();
@@ -68,25 +49,7 @@ function setupAuthListener() {
 function setupEventListeners() {
     googleLoginBtn.addEventListener('click', handleGoogleLogin);
     logoutBtn.addEventListener('click', handleLogout);
-    cancelAuthBtn.addEventListener('click', handleLogout);
-
-    // Validación del PIN
-    pinForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const inputPin = pinInput.value.trim();
-        const email = currentUser.email.toLowerCase().trim();
-        
-        // Buscamos el PIN correcto para este correo
-        const correctPin = AUTHORIZED_PINS[email];
-        
-        if (inputPin === correctPin) {
-            showDashboard(currentUser);
-        } else {
-            pinError.textContent = "PIN Incorrecto.";
-            pinInput.value = '';
-            pinInput.focus();
-        }
-    });
+    if(cancelAuthBtn) cancelAuthBtn.addEventListener('click', handleLogout);
 
     // Navegación del menú
     navItems.forEach(item => {
@@ -99,7 +62,7 @@ function setupEventListeners() {
 
 async function handleGoogleLogin() {
     const provider = new GoogleAuthProvider();
-    provider.setCustomParameters({ prompt: 'select_account' }); // Siempre preguntar cuenta
+    provider.setCustomParameters({ prompt: 'select_account' }); 
     loginError.textContent = '';
     try {
         await signInWithPopup(auth, provider);
@@ -112,8 +75,6 @@ async function handleGoogleLogin() {
 async function handleLogout() {
     try {
         await signOut(auth);
-        pinInput.value = '';
-        pinError.textContent = '';
         loginError.textContent = '';
     } catch (error) {
         console.error("Error logout:", error);
@@ -123,27 +84,18 @@ async function handleLogout() {
 // --- PANTALLAS ---
 function showLogin() {
     authContainer.style.display = 'flex';
-    pinContainer.style.display = 'none';
     dashboardContainer.style.display = 'none';
-}
-
-function showPinScreen(name) {
-    authContainer.style.display = 'none';
-    pinContainer.style.display = 'flex';
-    dashboardContainer.style.display = 'none';
-    pinUserName.textContent = name;
-    pinInput.focus();
 }
 
 function showDashboard(user) {
     authContainer.style.display = 'none';
-    pinContainer.style.display = 'none';
     dashboardContainer.style.display = 'flex';
     
     adminName.textContent = user.displayName;
     adminEmail.textContent = user.email;
-    adminAvatar.src = user.photoURL;
+    adminAvatar.src = user.photoURL || 'https://via.placeholder.com/150';
     
+    // Cargar vista inicial
     loadView('dashboard');
 }
 
@@ -177,6 +129,7 @@ async function loadView(viewName) {
 
 async function renderDashboardOverview() {
     try {
+        // Intentamos leer una colección. Si falla, es que no somos admins.
         const plantsSnap = await getDocs(query(collection(db, 'plants')));
         contentArea.innerHTML = `
             <div class="card">
@@ -185,7 +138,14 @@ async function renderDashboardOverview() {
             </div>
         `;
     } catch (error) {
-        contentArea.innerHTML = `<p style="color: red;">Error: ${error.message}</p>`;
+        console.error("Acceso denegado:", error);
+        contentArea.innerHTML = `
+            <div class="card" style="border-left: 5px solid red;">
+                <h3 style="color: red;">Acceso Denegado</h3>
+                <p>Tu cuenta (${currentUser.email}) no tiene permisos de administrador.</p>
+                <p>Si crees que es un error, contacta al dueño del sistema.</p>
+            </div>
+        `;
     }
 }
 

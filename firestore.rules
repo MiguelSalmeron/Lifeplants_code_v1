@@ -5,7 +5,6 @@ service cloud.firestore {
     // --- FUNCIONES DE AYUDA ---
 
     // Verifica si el usuario actual existe en la colección 'admins'
-    // Esto reemplaza la lista de emails "hardcoded"
     function isAdmin() {
       return request.auth != null && 
              exists(/databases/$(database)/documents/admins/$(request.auth.uid));
@@ -14,6 +13,11 @@ service cloud.firestore {
     // Verifica si el usuario actual es el dueño del documento (por ID)
     function isOwner(userId) {
       return request.auth != null && request.auth.uid == userId;
+    }
+
+    // Verifica si el usuario está autenticado (tiene cuenta y ha iniciado sesión)
+    function isAuthenticated() {
+      return request.auth != null;
     }
 
     // --- REGLAS DE COLECCIONES ---
@@ -30,8 +34,7 @@ service cloud.firestore {
       allow write: if isAdmin();
     }
     
-    // Foros: Todo el mundo lee, solo admins crean temas (si esa es la lógica deseada)
-    // NOTA: Si quieres que los usuarios creen temas, cambia el write a: if request.auth != null;
+    // Foros: Todo el mundo lee.
     match /forums/{document=**} {
       allow read: if true;
       allow write: if isAdmin();
@@ -43,25 +46,26 @@ service cloud.firestore {
       allow write: if isAdmin();
     }
 
-    // Perfiles de usuario: Público lee, Dueño o Admin editan
+    // Perfiles de usuario: 
+    // CORREGIDO: Solo usuarios registrados pueden ver perfiles (Privacidad).
+    // Solo el dueño o un admin pueden editar.
     match /userProfiles/{userId} {
-      allow read: if true;
+      allow read: if isAuthenticated(); 
       allow write: if isOwner(userId) || isAdmin();
     }
     
-    // Configuración de la App (appData): 
-    // CORREGIDO: Antes cualquiera podía escribir, ahora solo admins.
+    // Configuración de la App (appData): Solo admins escriben.
     match /appData/{document=**} {
       allow read: if true;
       allow write: if isAdmin();
     }
 
-    // Colección de Administradores (NUEVA):
-    // Nadie puede crear admins desde la web (write: false). 
-    // Solo se pueden crear manualmente desde la Consola de Firebase.
+    // Colección de Administradores:
+    // Solo el propio admin puede leer su documento para verificar permisos.
+    // Nadie puede escribir aquí desde la web (solo desde consola Firebase).
     match /admins/{userId} {
-      allow read: if isOwner(userId); // Un admin puede leer su propio doc para confirmar rol
-      allow write: if false; 
+      allow read: if isOwner(userId);
+      allow write: if false;
     }
   }
 }
