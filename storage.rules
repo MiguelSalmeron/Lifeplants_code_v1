@@ -4,12 +4,14 @@ service firebase.storage {
     
     // --- FUNCIONES DE SEGURIDAD ---
     
-    // Verifica si el usuario es uno de los 3 administradores autorizados
+    // Verifica si el usuario es uno de los administradores autorizados.
+    // NOTA: Si añades un nuevo admin, debes agregarlo aquí y desplegar las reglas de nuevo.
     function isAdmin() {
-      return request.auth != null && 
-             (request.auth.token.email == "miguel.salmeron.dev@gmail.com" || 
-              request.auth.token.email == "anasofiapg10@gmail.com" ||
-              request.auth.token.email == "smsg23112008@gmail.com");
+      return request.auth != null && (
+        request.auth.token.email == "miguel.salmeron.dev@gmail.com" || 
+        request.auth.token.email == "anasofiapg10@gmail.com" ||
+        request.auth.token.email == "smsg23112008@gmail.com"
+      );
     }
 
     // Verifica si el usuario es dueño de su propia carpeta (para fotos de perfil)
@@ -20,26 +22,22 @@ service firebase.storage {
     // --- REGLAS POR CARPETA ---
 
     // 1. Imágenes de Plantas
-    // Cualquiera puede verlas (para que salgan en la web).
-    // Solo los admins definidos arriba pueden subir, editar o borrar.
+    // Lectura pública, escritura solo admins.
     match /plants/{allPaths=**} {
       allow read: if true;
       allow write: if isAdmin();
     }
     
     // 2. Imágenes de Perfil de Usuarios
-    // Cualquiera puede ver la foto (si es un perfil público).
-    // Solo el dueño de la cuenta puede subir su propia foto.
+    // Lectura pública, escritura solo el dueño.
     match /users/{userId}/{allPaths=**} {
       allow read: if true;
       allow write: if isOwner(userId);
     }
     
-    // 3. Regla por defecto (Bloqueo de seguridad)
-    // Cualquier otro archivo fuera de 'plants' o 'users' está totalmente bloqueado.
+    // 3. Bloqueo por defecto
     match /{allPaths=**} {
-      allow read: if false;
-      allow write: if false;
+      allow read, write: if false;
     }
   }
 }
