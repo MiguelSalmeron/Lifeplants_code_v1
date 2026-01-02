@@ -2,7 +2,12 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // --- FUNCIONES DE AYUDA ---
+    // --- FUNCIONES DE AYUDA (Helpers) ---
+
+    // Atajo para acceder a los datos que se intentan guardar
+    function incomingData() {
+      return request.resource.data;
+    }
 
     // Verifica si el usuario actual existe en la colección 'admins'
     function isAdmin() {
@@ -10,62 +15,96 @@ service cloud.firestore {
              exists(/databases/$(database)/documents/admins/$(request.auth.uid));
     }
     
-    // Verifica si el usuario actual es el dueño del documento (por ID)
+    // Verifica si el usuario actual es el dueño del documento
     function isOwner(userId) {
       return request.auth != null && request.auth.uid == userId;
     }
 
-    // Verifica si el usuario está autenticado (tiene cuenta y ha iniciado sesión)
+    // Verifica si el usuario está autenticado
     function isAuthenticated() {
       return request.auth != null;
     }
 
+    // --- FUNCIONES DE VALIDACIÓN DE DATOS ---
+
+    // Valida que el perfil de usuario tenga el formato correcto
+    function isValidUserProfile() {
+      let data = incomingData();
+      
+      // 1. Validar displayName (Obligatorio, String, entre 1 y 50 caracteres)
+      let validName = data.keys().hasAll(['displayName']) &&
+                      data.displayName is string &&
+                      data.displayName.size() > 0 &&
+                      data.displayName.size() <= 50;
+
+      // 2. Validar email (Obligatorio, String, formato email básico)
+      // Nota: No es estricto, pero evita que guarden números o booleanos como email.
+      let validEmail = data.keys().hasAll(['email']) &&
+                       data.email is string &&
+                       data.email.matches('^[^@]+@[^@]+\\.[a-zA-Z]{2,}$');
+
+      // 3. Validar listas opcionales (favorites, userCampaigns)
+      // Si el campo existe, debe ser una lista (array).
+      let validFavorites = !data.keys().hasAny(['favorites']) || data.favorites is list;
+      let validCampaigns = !data.keys().hasAny(['userCampaigns']) || data.userCampaigns is list;
+
+      return validName && validEmail && validFavorites && validCampaigns;
+    }
+
     // --- REGLAS DE COLECCIONES ---
 
-    // Plantas: Todo el mundo lee, solo admins editan
+    // 1. Plantas, Campañas, Foros, Comunidades
+    // Lectura pública, escritura solo administradores.
     match /plants/{document=**} {
       allow read: if true;
       allow write: if isAdmin();
     }
     
-    // Campañas: Todo el mundo lee, solo admins editan
     match /campaigns/{document=**} {
       allow read: if true;
       allow write: if isAdmin();
     }
     
-    // Foros: Todo el mundo lee.
     match /forums/{document=**} {
       allow read: if true;
       allow write: if isAdmin();
     }
     
-    // Comunidades: Todo el mundo lee, solo admins administran
     match /communities/{document=**} {
       allow read: if true;
       allow write: if isAdmin();
     }
 
-    // Perfiles de usuario: 
-    // CORREGIDO: Solo usuarios registrados pueden ver perfiles (Privacidad).
-    // Solo el dueño o un admin pueden editar.
+    // 2. Perfiles de Usuario (Protegidos + Validados)
     match /userProfiles/{userId} {
-      allow read: if isAuthenticated(); 
-      allow write: if isOwner(userId) || isAdmin();
+      // Cualquier usuario autenticado puede ver perfiles básicos (necesario para foros/comentarios)
+      allow read: if isAuthenticated();
+      
+      // Escritura permitida si:
+      // (Es el dueño O es Admin) Y (Los datos que envía pasan la validación)
+      allow write: if (isOwner(userId) || isAdmin()) && isValidUserProfile();
     }
     
-    // Configuración de la App (appData): Solo admins escriben.
-    match /appData/{document=**} {
+    // 3. Configuración de la App (SEGURIDAD MEJORADA)
+    
+    // Regla específica: Solo 'chatData' es público (necesario para tu chat global)
+    match /appData/chatData {
       allow read: if true;
       allow write: if isAdmin();
     }
+    
+    // Regla general: Cualquier otro documento en appData (secretos, configs) está bloqueado para el público
+    // Solo el admin puede escribir/leer otros documentos si fuera necesario
+    match /appData/{otherDocument=**} {
+      allow read: if false; 
+      allow write: if isAdmin();
+    }
 
-    // Colección de Administradores:
-    // Solo el propio admin puede leer su documento para verificar permisos.
-    // Nadie puede escribir aquí desde la web (solo desde consola Firebase).
+    // 4. Colección de Administradores
+    // Solo el dueño puede leer su propio documento (para verificar permisos en el frontend si hace falta)
     match /admins/{userId} {
       allow read: if isOwner(userId);
-      allow write: if false;
+      allow write: if false; // Nadie escribe aquí desde la web, solo desde la consola Firebase
     }
   }
 }

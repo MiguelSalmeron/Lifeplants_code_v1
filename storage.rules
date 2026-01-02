@@ -4,14 +4,11 @@ service firebase.storage {
     
     // --- FUNCIONES DE SEGURIDAD ---
     
-    // Verifica si el usuario es uno de los administradores autorizados.
-    // NOTA: Si añades un nuevo admin, debes agregarlo aquí y desplegar las reglas de nuevo.
+    // CORREGIDO: Verifica si el usuario es administrador consultando la base de datos Firestore.
+    // Ya no es necesario editar este archivo para agregar nuevos admins; solo agrégalos a la colección 'admins' en Firestore.
     function isAdmin() {
-      return request.auth != null && (
-        request.auth.token.email == "miguel.salmeron.dev@gmail.com" || 
-        request.auth.token.email == "anasofiapg10@gmail.com" ||
-        request.auth.token.email == "smsg23112008@gmail.com"
-      );
+      return request.auth != null && 
+             firestore.exists(/databases/(default)/documents/admins/$(request.auth.uid));
     }
 
     // Verifica si el usuario es dueño de su propia carpeta (para fotos de perfil)

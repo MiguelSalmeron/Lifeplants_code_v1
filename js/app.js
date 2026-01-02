@@ -1,7 +1,7 @@
 import { setupEventListeners } from './events.js';
 import { handleRouting, navigate } from './router.js';
 import { updateAuthUI, requireAuth } from './auth.js';
-import { fetchAllData } from './data.js';
+import { fetchInitialData, fetchPlants } from './data.js'; // IMPORTAMOS LAS NUEVAS FUNCIONES
 import { renderPlantGrid, updateFavoriteButtonVisual, renderPlantOfTheWeek, renderQuickSearchResults, populateFilterOptions } from './ui/plantUI.js';
 import { renderCampaignCards } from './ui/communityUI.js';
 import { showIdentifierLoading, renderIdentificationResults } from './ui/identifierUI.js';
@@ -13,17 +13,31 @@ import { awardBadge, createUserProfileDocument, updateUserFavorites, updateUserC
 import { identifyWithInaturalist } from './plant-identifier.js';
 
 export let state = {
-    allPlants: {},
+    // Datos cargados
+    displayedPlants: {}, // Plantas visibles actualmente
     favorites: [],
-    currentPlantKey: null,
     forums: [],
     communities: [],
     campaigns: [],
     userCampaigns: [],
     chatData: {},
+    
+    // Estado de UI y Navegación
+    currentPlantKey: null,
     plantOfTheWeekKey: null,
     currentImageFile: null,
     isInitialRouteDone: false,
+
+    // Estado de Paginación y Filtros
+    lastVisible: null,   // Cursor para saber dónde nos quedamos
+    hasMore: true,       // ¿Hay más plantas para cargar?
+    isLoading: false,    // Evitar doble carga
+    currentFilters: {    // Filtros activos para enviarlos al servidor
+        search: '',
+        uso: 'todos',
+        region: 'todos',
+        tipo: 'todos'
+    }
 };
 
 export async function handleUserCreation(user) {
@@ -43,6 +57,68 @@ export function toggleAnimations() {
     document.body.classList.toggle('no-transitions', isDisabled);
     localStorage.setItem('animationsDisabled', isDisabled ? 'true' : 'false');
 }
+
+// --- LOGICA DE CARGA DE PLANTAS (PAGINACIÓN) ---
+
+export async function loadPlants(reset = false) {
+    if (state.isLoading) return;
+    if (!reset && !state.hasMore) return; // Si no es reset y no hay más, no hacemos nada
+
+    state.isLoading = true;
+    
+    // Mostrar spinner si existe en la UI (opcional)
+    const loader = document.getElementById('plantsLoader');
+    if (loader) loader.style.display = 'block';
+
+    if (reset) {
+        state.lastVisible = null;
+        state.displayedPlants = {};
+        // La limpieza visual del grid la manejará renderPlantGrid con el flag 'reset'
+    }
+
+    try {
+        const result = await fetchPlants({
+            lastVisible: state.lastVisible,
+            pageSize: 10, // Cargar de 10 en 10
+            filters: state.currentFilters
+        });
+
+        // Actualizar estado
+        state.lastVisible = result.lastVisible;
+        state.hasMore = result.hasMore;
+        
+        // Acumular plantas nuevas
+        state.displayedPlants = { ...state.displayedPlants, ...result.plants };
+
+        // Renderizar (Pasamos las nuevas plantas y flags importantes)
+        // NOTA: renderPlantGrid se actualizará en el siguiente paso para manejar 'reset' y 'append'
+        renderPlantGrid(
+            Object.keys(result.plants), // Solo pasamos las claves de las NUEVAS plantas para append
+            state.displayedPlants,      // Pasamos el mapa completo para referencias
+            state.favorites, 
+            'plantGridContainer',
+            reset // Nuevo parámetro para saber si limpiar el contenedor
+        );
+
+    } catch (error) {
+        console.error("Error loading plants:", error);
+    } finally {
+        state.isLoading = false;
+        if (loader) loader.style.display = 'none';
+        
+        // Gestionar botón "Cargar más"
+        const loadMoreBtn = document.getElementById('loadMorePlantsBtn');
+        if (loadMoreBtn) {
+            loadMoreBtn.style.display = state.hasMore ? 'block' : 'none';
+        }
+    }
+}
+
+export function handleLoadMore() {
+    loadPlants(false); // Cargar siguiente página
+}
+
+// --- FIN LOGICA PAGINACIÓN ---
 
 export function joinCampaign(campaignId) {
     if (!requireAuth("Debes iniciar sesión para unirte a una campaña.")) {
@@ -72,25 +148,16 @@ export function joinCampaign(campaignId) {
     });
 }
 
-export function handlePlantOfTheWeek() {
-    if (!state.allPlants || Object.keys(state.allPlants).length === 0) return;
-    const lastCheck = localStorage.getItem('potw_date');
-    const savedPlantKey = localStorage.getItem('potw_key');
-    const oneWeek = 7 * 24 * 60 * 60 * 1000;
-
-    if (!lastCheck || !savedPlantKey || (new Date() - new Date(lastCheck)) > oneWeek) {
-        const plantKeys = Object.keys(state.allPlants);
-        const randomKey = plantKeys[Math.floor(Math.random() * plantKeys.length)];
+// Plant of the Week ahora requiere cargar una planta específica si no está en la lista parcial
+export async function handlePlantOfTheWeek() {
+    // Simplificación: Por ahora mostramos una aleatoria de las que tengamos o estática.
+    // Para hacerlo robusto con paginación, idealmente se pediría al servidor "dame la planta destacada".
+    // Aquí usamos una lógica simple con lo que hay disponible.
+    const keys = Object.keys(state.displayedPlants);
+    if (keys.length > 0) {
+        const randomKey = keys[Math.floor(Math.random() * keys.length)];
         state.plantOfTheWeekKey = randomKey;
-        localStorage.setItem('potw_key', randomKey);
-        localStorage.setItem('potw_date', new Date().toISOString());
-    } else {
-        state.plantOfTheWeekKey = savedPlantKey;
-    }
-
-    const plant = state.allPlants[state.plantOfTheWeekKey];
-    if (plant) {
-        renderPlantOfTheWeek(plant, state.plantOfTheWeekKey);
+        renderPlantOfTheWeek(state.displayedPlants[randomKey], randomKey);
     }
 }
 
@@ -117,7 +184,13 @@ export function toggleFavorite(plantKey) {
         updateUserFavorites(plantKey, isAdding);
     });
 
-    handleFilterChange();
+    // Actualizar visualmente sin recargar todo
+    // Nota: handleFilterChange ya no es necesario aquí para refrescar grid completo
+    updateFavoriteButtonVisual(state.favorites.includes(plantKey));
+    // Re-renderizar favoritos si estamos en esa vista
+    if(window.location.pathname.includes('/favoritos')) {
+        // Lógica específica de favoritos (pendiente de refactorizar si es necesario)
+    }
 }
 
 export function toggleFavoriteFromDetail() {
@@ -127,122 +200,88 @@ export function toggleFavoriteFromDetail() {
     }
 }
 
-export function handleQuickSearch(searchTerm) {
+// Búsqueda Rápida (Modal) - Ahora busca en servidor
+export async function handleQuickSearch(searchTerm) {
     const term = searchTerm.toLowerCase().trim();
     if (term.length < 2) {
-        document.getElementById('quickSearchResults').innerHTML = '<p class="search-tip">Busca por nombre común o científico. Presiona Enter para ir a la vista Explorar.</p>';
+        document.getElementById('quickSearchResults').innerHTML = '<p class="search-tip">Escribe al menos 2 letras.</p>';
         return;
     }
 
-    const maxResults = 5;
+    // Usamos fetchPlants con un límite pequeño para búsqueda rápida
     const results = [];
-    const allPlants = state.allPlants || {};
+    
+    // 1. Buscar Plantas (Servidor)
+    const plantData = await fetchPlants({ 
+        filters: { search: term }, 
+        pageSize: 5 
+    });
+    
+    Object.values(plantData.plants).forEach(plant => {
+        results.push({
+            type: 'Planta',
+            name: plant.name,
+            path: `/planta/${plant.id}`
+        });
+    });
 
-    for (const key in allPlants) {
-        const plant = allPlants[key];
-        const safeName = (plant.name || "").toLowerCase();
-        const safeScientific = (plant.scientificName || "").toLowerCase();
-
-        if (safeName.includes(term) || safeScientific.includes(term)) {
-            results.push({
-                type: 'Planta',
-                name: plant.name || "Sin Nombre",
-                key: key,
-                path: `/planta/${key}`
-            });
-            if (results.length >= maxResults) break;
-        }
-    }
-
+    // 2. Buscar en Foros/Comunidades (Local, ya que son pocos)
     const allTopics = [
         ...(state.forums || []).map(f => ({ ...f, type: 'Foro', path: `/foro/${f.id}` })),
         ...(state.communities || []).map(c => ({ ...c, type: 'Comunidad', name: c.name, path: `/comunidad/${c.id}` }))
     ];
 
-    if (results.length < maxResults) {
-        for (const item of allTopics) {
-             const safeName = (item.name || "").toLowerCase();
-             const safeTitle = (item.title || "").toLowerCase();
-             const safeDesc = (item.description || "").toLowerCase();
-             
-             if (safeName.includes(term) || safeTitle.includes(term) || safeDesc.includes(term)) {
-                 results.push(item);
-                 if (results.length >= maxResults) break;
-             }
-        }
+    for (const item of allTopics) {
+         const safeName = (item.name || "").toLowerCase();
+         const safeTitle = (item.title || "").toLowerCase();
+         if (safeName.includes(term) || safeTitle.includes(term)) {
+             results.push(item);
+             if (results.length >= 5) break; 
+         }
     }
 
     renderQuickSearchResults(results);
 }
 
+// Filtros Principales (Grid)
 export function handleFilterChange() {
     const searchInput = document.getElementById('exploreSearchInput');
-    const filterOrderInput = document.getElementById('filterOrder');
-    if (!searchInput || !filterOrderInput) return;
-    if (!state.allPlants) return;
+    
+    // Actualizar estado de filtros
+    if (searchInput) state.currentFilters.search = searchInput.value.toLowerCase().trim();
+    
+    const fUso = document.getElementById('filterUso');
+    if (fUso) state.currentFilters.uso = fUso.value;
 
-    const searchTerm = searchInput.value.toLowerCase();
-    const usoFilter = document.getElementById('filterUso').value;
-    const regionFilter = document.getElementById('filterRegion').value;
-    const tipoFilter = document.getElementById('filterTipo').value;
-    const orderValue = filterOrderInput.value;
+    const fRegion = document.getElementById('filterRegion');
+    if (fRegion) state.currentFilters.region = fRegion.value;
 
-    let filteredKeys = Object.keys(state.allPlants).filter(key => {
-        const plant = state.allPlants[key];
-        if (!plant) return false;
+    const fTipo = document.getElementById('filterTipo');
+    if (fTipo) state.currentFilters.tipo = fTipo.value;
 
-        const safeName = (plant.name || "").toLowerCase();
-        const nameMatch = safeName.includes(searchTerm);
-        
-        const usoMatch = usoFilter === 'todos' || (plant.uso && plant.uso.includes(usoFilter));
-        const regionMatch = regionFilter === 'todos' || (plant.region && plant.region.includes(regionFilter));
-        const tipoMatch = tipoFilter === 'todos' || plant.tipo === tipoFilter;
-        
-        return nameMatch && usoMatch && regionMatch && tipoMatch;
-    });
-
-    filteredKeys.sort((keyA, keyB) => {
-        const plantA = state.allPlants[keyA];
-        const plantB = state.allPlants[keyB];
-
-        const nameA = (plantA.name || "").toLowerCase();
-        const nameB = (plantB.name || "").toLowerCase();
-
-        if (orderValue === 'name_asc') {
-            return nameA.localeCompare(nameB);
-        } else if (orderValue === 'name_desc') {
-            return nameB.localeCompare(nameA);
-        } else if (orderValue === 'popularidad') {
-            const countA = state.favorites.filter(favKey => favKey === keyA).length;
-            const countB = state.favorites.filter(favKey => favKey === keyA).length;
-            if (countB !== countA) {
-                return countB - countA;
-            }
-            return nameA.localeCompare(nameB); 
-        }
-        return 0;
-    });
-
-    renderPlantGrid(filteredKeys, state.allPlants, state.favorites);
+    // Recargar desde cero con los nuevos filtros
+    loadPlants(true);
 }
 
 export function resetFilters() {
     const searchInput = document.getElementById('exploreSearchInput');
     if(searchInput) searchInput.value = '';
     
-    const fUso = document.getElementById('filterUso');
-    if(fUso) fUso.value = 'todos';
+    const elements = ['filterUso', 'filterRegion', 'filterTipo'];
+    elements.forEach(id => {
+        const el = document.getElementById(id);
+        if(el) el.value = 'todos';
+    });
 
-    const fRegion = document.getElementById('filterRegion');
-    if(fRegion) fRegion.value = 'todos';
-
-    const fTipo = document.getElementById('filterTipo');
-    if(fTipo) fTipo.value = 'todos';
-
-    const fOrder = document.getElementById('filterOrder');
-    if(fOrder) fOrder.value = 'name_asc';
+    // Resetear estado
+    state.currentFilters = {
+        search: '',
+        uso: 'todos',
+        region: 'todos',
+        tipo: 'todos'
+    };
     
-    handleFilterChange();
+    loadPlants(true);
 }
 
 export async function handleImageIdentification(file) {
@@ -261,18 +300,20 @@ export async function handleImageIdentification(file) {
 }
 
 async function init() {
-    const data = await fetchAllData();
-    state.allPlants = data.allPlants || {}; 
+    // 1. Cargar datos base (Ligeros)
+    const data = await fetchInitialData();
     state.forums = data.forums || [];
     state.communities = data.communities || [];
     state.campaigns = data.campaigns || [];
     state.chatData = data.chatData || {};
 
-    populateFilterOptions(state.allPlants);
+    // 2. Configuración UI
+    // Nota: populateFilterOptions antes usaba allPlants. Ahora debería ser estático o basado en stats, 
+    // pero por simplicidad lo dejaremos pendiente o manual.
+    // populateFilterOptions(state.allPlants); 
 
     const savedTheme = localStorage.getItem('theme') || 'light';
     setTheme(savedTheme);
-
     const themeSelector = document.getElementById('themeSelector');
     if (themeSelector) themeSelector.value = savedTheme;
 
@@ -288,6 +329,7 @@ async function init() {
     window.addEventListener('routechange', () => handleRouting(state));
     window.addEventListener('popstate', () => handleRouting(state));
 
+    // 3. Autenticación
     onAuthStateChanged(auth, async (user) => {
         let profileData = null;
         if (user) {
@@ -301,8 +343,6 @@ async function init() {
                 }
             } catch (error) {
                 console.error(error);
-                state.favorites = [];
-                state.userCampaigns = [];
             }
         } else {
             state.favorites = [];
@@ -316,9 +356,13 @@ async function init() {
         }
     });
 
+    // 4. Carga Inicial de Plantas (Primera página)
+    await loadPlants(true);
+
     handleRouting(state);
     state.isInitialRouteDone = true; 
 
+    // Ocultar Loader Global
     const loader = document.getElementById('loader');
     const mainContainerWrapper = document.querySelector('.main-container-wrapper');
     if (loader) {

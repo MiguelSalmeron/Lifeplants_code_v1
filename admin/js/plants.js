@@ -342,4 +342,4 @@ function injectStyles() {
         .delete-btn:hover { background: #fee2e2; }
     `;
     document.head.appendChild(style);
-}
+} 

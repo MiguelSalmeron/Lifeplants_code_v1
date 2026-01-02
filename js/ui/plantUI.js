@@ -1,3 +1,5 @@
+import { handleLoadMore } from '../app.js'; // Importamos la acción para el botón
+
 function escapeHtml(text) {
     if (text === null || text === undefined) return '';
     return String(text)
@@ -8,29 +10,63 @@ function escapeHtml(text) {
         .replace(/'/g, "&#039;");
 }
 
-export function renderPlantGrid(plantKeys, allPlants, favorites, containerId = 'plantGridContainer') {
+// Helper para inyectar el botón de carga si no existe
+function ensureLoadMoreButton(containerId) {
     const container = document.getElementById(containerId);
     if (!container) return;
-    container.innerHTML = '';
+
+    // Buscamos si ya existe el botón justo después del container
+    let btn = document.getElementById('loadMorePlantsBtn');
+    
+    // Si no existe, lo creamos
+    if (!btn) {
+        btn = document.createElement('button');
+        btn.id = 'loadMorePlantsBtn';
+        btn.className = 'button-primary';
+        btn.style.display = 'none'; // Se oculta por defecto, app.js lo muestra si hay más
+        btn.style.margin = '2rem auto';
+        btn.style.maxWidth = '200px';
+        btn.textContent = 'Cargar más plantas';
+        
+        // Lo insertamos después del grid
+        container.parentNode.insertBefore(btn, container.nextSibling);
+        
+        // Evento
+        btn.addEventListener('click', () => {
+            handleLoadMore();
+        });
+    }
+}
+
+export function renderPlantGrid(plantKeys, allPlants, favorites, containerId = 'plantGridContainer', reset = false) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+
+    // 1. Si es reset, limpiamos todo y aseguramos que el botón exista
+    if (reset) {
+        container.innerHTML = '';
+        ensureLoadMoreButton(containerId);
+        window.scrollTo(0, 0); // Volver arriba en nueva búsqueda
+    }
 
     const urlParams = new URLSearchParams(window.location.search);
     const searchTermFromUrl = urlParams.get('q');
-    if (searchTermFromUrl) {
+    
+    // Restaurar valor del input si viene de URL (solo visual)
+    if (searchTermFromUrl && reset) {
         const exploreSearchInput = document.getElementById('exploreSearchInput');
         if (exploreSearchInput && exploreSearchInput.value === '') {
             exploreSearchInput.value = decodeURIComponent(searchTermFromUrl);
         }
-        if (window.history.replaceState) {
-            const cleanUrl = window.location.origin + window.location.pathname;
-            window.history.replaceState(null, null, cleanUrl);
-        }
     }
 
-    if (!plantKeys || plantKeys.length === 0) {
-        container.innerHTML = `<p style="text-align: center; width: 100%;">No se encontraron plantas que coincidan con tu búsqueda.</p>`;
+    // 2. Manejo de "Sin resultados" (Solo si es reset y no hay claves)
+    if (reset && (!plantKeys || plantKeys.length === 0)) {
+        container.innerHTML = `<p style="text-align: center; width: 100%; grid-column: 1 / -1; padding: 2rem;">No se encontraron plantas que coincidan con tu búsqueda.</p>`;
         return;
     }
 
+    // 3. Renderizado de las plantas (Nuevas o Totales según el contexto)
     plantKeys.forEach(key => {
         const plant = allPlants?.[key];
         if (!plant) return;
@@ -42,6 +78,10 @@ export function renderPlantGrid(plantKeys, allPlants, favorites, containerId = '
         const card = document.createElement('div');
         card.className = 'plant-card';
         card.dataset.plantKey = key;
+        
+        // Animación de entrada suave
+        card.style.animation = 'fadeIn 0.5s ease-out';
+
         card.innerHTML = `
             <button class="plant-card-fav-btn ${isFavorited ? 'favorited' : ''}" aria-label="Añadir a favoritos">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -103,6 +143,7 @@ export function renderPlantDetail(plant) {
         </div>
     `;
 
+    // Re-bind eventos de colapsables
     section.querySelectorAll('.collapsible .section-title').forEach(title => {
         title.addEventListener('click', () => title.parentElement.classList.toggle('open'));
     });
@@ -127,7 +168,11 @@ export function renderFavorites(favoriteKeys, allPlants) {
     } else {
         emptyMsg.style.display = 'none';
         grid.style.display = 'grid';
-        renderPlantGrid(favs, allPlants, favs, 'favoritesGridContainer');
+        // Renderizar favoritos reusando la lógica base (sin paginación compleja por ahora)
+        // Pasamos 'favs' como las claves nuevas y 'allPlants' (aunque podría ser parcial)
+        // Nota: Para favoritos, idealmente deberíamos cargar esas plantas específicas si no están en memoria.
+        // Por ahora asumimos que el usuario ve lo que ha navegado o implementamos carga de favoritos en data.js
+        renderPlantGrid(favs, allPlants, favs, 'favoritesGridContainer', true);
     }
 }
 
@@ -166,7 +211,7 @@ export function renderQuickSearchResults(results) {
     if (list.length === 0) {
         const termInput = document.getElementById('quickSearchInput');
         const term = termInput ? termInput.value.trim() : "";
-        container.innerHTML = `<p class="search-tip">No se encontraron resultados para "${escapeHtml(term)}". Presiona Enter para ir a la vista Explorar y refinar tu búsqueda.</p>`;
+        container.innerHTML = `<p class="search-tip">No se encontraron resultados para "${escapeHtml(term)}".</p>`;
         return;
     }
 
@@ -189,55 +234,11 @@ export function renderQuickSearchResults(results) {
     container.innerHTML = `<div class="quick-search-results-list">${resultsHTML}</div>`;
 }
 
+// Opción simple para filtros: Valores estáticos comunes o manuales
+// Ya que no tenemos todas las plantas para calcularlos dinámicamente
 export function populateFilterOptions(allPlants) {
-    if (!allPlants || Object.keys(allPlants).length === 0) return;
-
-    const filters = {
-        uso: new Set(),
-        region: new Set(),
-        tipo: new Set()
-    };
-
-    Object.values(allPlants).forEach(plant => {
-        if (plant?.uso && Array.isArray(plant.uso)) {
-            plant.uso.forEach(u => {
-                if (u) filters.uso.add(String(u).toLowerCase());
-            });
-        }
-        if (plant?.region && Array.isArray(plant.region)) {
-            plant.region.forEach(r => {
-                if (r) filters.region.add(String(r).toLowerCase());
-            });
-        }
-        if (plant?.tipo) {
-            filters.tipo.add(String(plant.tipo).toLowerCase());
-        }
-    });
-
-    const renderSelect = (selectId, uniqueValues) => {
-        const selectEl = document.getElementById(selectId);
-        if (!selectEl) return;
-
-        const existingTodos = Array.from(selectEl.querySelectorAll('option')).find(opt => opt.value === 'todos');
-        selectEl.innerHTML = '';
-        if (existingTodos) {
-            selectEl.appendChild(existingTodos);
-        } else {
-            const opt = document.createElement('option');
-            opt.value = 'todos';
-            opt.textContent = 'Todos';
-            selectEl.appendChild(opt);
-        }
-
-        Array.from(uniqueValues).sort().forEach(value => {
-            const option = document.createElement('option');
-            option.value = value;
-            option.textContent = value.charAt(0).toUpperCase() + value.slice(1);
-            selectEl.appendChild(option);
-        });
-    };
-
-    renderSelect('filterUso', filters.uso);
-    renderSelect('filterRegion', filters.region);
-    renderSelect('filterTipo', filters.tipo);
+   // Se deja vacía o con valores fijos para no romper la UI al inicio
+   // Idealmente, aquí pondrías tus categorías fijas:
+   // const usos = ['Medicinal', 'Ornamental', 'Comestible'];
+   // renderSelect('filterUso', usos);
 }
